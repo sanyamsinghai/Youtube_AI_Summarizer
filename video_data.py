@@ -4,16 +4,13 @@ import os
 from extractor import extract_video_id, get_channel_id
 import json
 
+load_dotenv()
+api_key = os.getenv("YOUTUBE_API_KEY")
 
-def get_response():
-
-    load_dotenv()
-    api_key = os.getenv("YOUTUBE_API_KEY")
+def get_response(channel_id):
 
     # TODO: handle @handle and /c/ URL formats later
 
-
-    channel_id = get_channel_id(input("Enter YouTube channel URL: "))
     if channel_id is None:
         print("Invalid Channel ID")
         return None
@@ -22,7 +19,8 @@ def get_response():
         "channelId": channel_id, 
         "part" : "snippet",
         "key" : api_key,
-        "maxResults": 10
+        "maxResults": 10,
+        "type": "video"
     }
 
     try:
@@ -58,7 +56,3 @@ def filter_video_data(raw_data):
 def save_to_json(data, filename="video_data.json"):
     with open(filename, "w") as f:
         json.dump(data, f, indent=4)
-
-raw_data = get_response()
-clean_data = filter_video_data(raw_data)
-save_to_json(clean_data)
