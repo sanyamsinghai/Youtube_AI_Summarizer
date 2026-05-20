@@ -8,8 +8,8 @@ load_dotenv()
 api_key = os.getenv("YOUTUBE_API_KEY")
 
 def get_response(channel_id):
-
-    # TODO: handle @handle and /c/ URL formats later
+    # Supports all YouTube channel URL formats: /channel/, /c/, and @handle
+    # (handled by get_channel_id in extractor.py)
 
     if channel_id is None:
         print("Invalid Channel ID")
