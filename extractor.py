@@ -6,24 +6,24 @@ from dotenv import load_dotenv
 load_dotenv()
 api_key = os.getenv("YOUTUBE_API_KEY")
 
-# def extract_video_id(url):
+def extract_video_id(url):
 
-#     video_id = None
+    video_id = None
 
-#     if "youtu.be" in url:
-#         path = urlparse(url).path
-#         video_id = path.split("/")[-1]
+    if "youtu.be" in url:
+        path = urlparse(url).path
+        video_id = path.split("/")[-1]
         
-#     elif "youtube.com" in url:
-#         if "/embed/" in url:
-#             path = urlparse(url).path
-#             video_id = path.split("/")[-1]
+    elif "youtube.com" in url:
+        if "/embed/" in url:
+            path = urlparse(url).path
+            video_id = path.split("/")[-1]
             
-#         else:
-#             query = urlparse(url).query
-#             video_id = parse_qs(query).get("v", [None])[0]
+        else:
+            query = urlparse(url).query
+            video_id = parse_qs(query).get("v", [None])[0]
 
-#     return video_id
+    return video_id
     
 def get_channel_id(url):
     """

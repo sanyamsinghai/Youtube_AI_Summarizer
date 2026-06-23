@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from datetime import datetime, timezone
 
 from transcript_fetcher import get_transcript
 from extractor import get_channel_id
@@ -13,6 +14,26 @@ from prompts import STYLES
 # 3. For each video → use videoId → fetch transcript
 # 4. Combine video data + transcript
 # 5. Save everything to JSON
+
+
+def save_summary_to_json(summary_data, filename="summary_data.json"):
+    summaries = []
+
+    if os.path.exists(filename):
+        try:
+            with open(filename, "r", encoding="utf-8") as f:
+                existing_data = json.load(f)
+            if isinstance(existing_data, list):
+                summaries = existing_data
+            elif isinstance(existing_data, dict):
+                summaries = [existing_data]
+        except json.JSONDecodeError:
+            summaries = []
+
+    summaries.append(summary_data)
+
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(summaries, f, indent=4, ensure_ascii=False)
 
 
 
@@ -33,14 +54,12 @@ if channel_id is None:
 else:
     response = filter_video_data(get_response(channel_id))
     if response is not None:
-        transcript = None
         for video in response:
             video_id = video.get("videoId")
             transcript = get_transcript(video_id)
             video["transcript"] = transcript
             if transcript:
                 print("Testing with:", video.get("title"))
-                break
             time.sleep(1.5)
         save_to_json(response)
     else:
@@ -75,6 +94,22 @@ if transcript:
     if style in valid_styles:
         print("Summarizing...")
         result = summarize_transcript(transcript, style)
+        selected_video = next((video for video in videos if video.get("transcript")), None)
+        summary_record = {
+            "sourceVideo": {
+                "channelTitle": selected_video.get("channelTitle") if selected_video else None,
+                "channelId": selected_video.get("channelId") if selected_video else None,
+                "title": selected_video.get("title") if selected_video else None,
+                "publishedAt": selected_video.get("publishedAt") if selected_video else None,
+                "videoId": selected_video.get("videoId") if selected_video else None,
+            },
+            "style": style,
+            "summary": result,
+            "generatedAt": datetime.now(timezone.utc).isoformat()
+        }
+        save_summary_to_json(summary_record)
+        print("Summary saved to summary_data.json")
+        print("\n--- Summary ---\n")
         print(result)
     else:
         print("Invalid style.")
