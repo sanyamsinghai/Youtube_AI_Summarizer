@@ -21,4 +21,5 @@ python-dotenv==1.2.2
 requests==2.34.0
 uritemplate==4.2.0
 urllib3==2.7.0
+email-validator==2.3.0
 youtube-transcript-api==1.2.4

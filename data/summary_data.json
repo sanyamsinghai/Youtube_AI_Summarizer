@@ -1,0 +1,118 @@
+[
+    {
+        "sourceVideo": {
+            "channelTitle": "Krish Naik",
+            "channelId": "UCNU_lfiiWBdtULKOw6X0Dig",
+            "title": "What Are LLM Gateways With Detailed Implementation",
+            "publishedAt": "2026-05-19T16:15:16Z",
+            "videoId": "RN3baOpNA6w"
+        },
+        "style": "bullet",
+        "summary": "Here are the key ideas from the video in simple bullet points:\n\n* An LLM (Large Language Model) gateway is a middle layer that connects your app to different LLM providers, making it easy to switch between them.\n* The LLM gateway helps prevent outages and ensures that your application always has access to an LLM provider, even if one of them fails.\n* The gateway provides a unified API for multiple providers, making it easier to switch between them and simplifying the development process.\n* The LLM gateway has features like routing, caching, rate limiting, and cost tracking to help manage your application's use of AI APIs.\n* Using an LLM gateway can help prevent downtime, improve the overall reliability of your application, and simplify the development process.\n* The gateway can be configured to work with different applications and providers, making it a flexible solution.\n* The LLM gateway can also help with tasks like caching and cost tracking, which can be important for managing your application's resources.\n* Smart routing and load balancing can be used to optimize the performance of the LLM gateway and prevent overloading.\n* The LLM gateway can be used with multiple API keys and LLM models behind a single interface, making it easy to manage and optimize your application's use of LLMs.",
+        "generatedAt": "2026-05-22T16:02:08.721427+00:00"
+    },
+    {
+        "sourceVideo": {
+            "channelTitle": "Krish Naik",
+            "channelId": "UCNU_lfiiWBdtULKOw6X0Dig",
+            "title": "What Are LLM Gateways With Detailed Implementation",
+            "publishedAt": "2026-05-19T16:15:16Z",
+            "videoId": "RN3baOpNA6w"
+        },
+        "style": "bullet",
+        "summary": "Here are the key ideas from the video in simple, clear bullet points:\n\n* An LLM (Large Language Model) gateway is a middle layer that helps your app communicate with different language model providers.\n* The gateway ensures that your app keeps working even if one of the language model providers is down, by automatically switching to another provider.\n* Using an LLM gateway provides a unified API for multiple providers, automatic fallbacks, and cost tracking.\n* The gateway also provides caching, which can help reduce the number of requests made to the language model providers and save costs.\n* The system can display parameters such as latency, deployment ID, and response time for each request, and route requests to different models based on the load and availability of each model.\n* A \"smart router\" can be used to categorize user input and send it to the appropriate model, such as GPT4, GPT4 mini, or Grock Lama 3.3.\n* The gateway has guardrails that can be implemented to restrict certain queries or actions, and protect user privacy and security by controlling the information that reaches the LLM.\n* The use of LLMs and smart routers enables fast and accurate processing of user queries, with minimal costs due to free API keys or caching.\n* The LLM gateway provides a flexible and efficient way to manage and process user queries using multiple models and guardrails.\n* By using an LLM gateway, developers can build more robust and reliable AI applications that can handle outages and changes in LLM providers.",
+        "generatedAt": "2026-05-22T16:25:12.832924+00:00"
+    },
+    {
+        "sourceVideo": {
+            "channelTitle": "Ryan Bednar",
+            "channelId": "UCyYSbZK13mgCdutpIyKJeng",
+            "title": "My favourite onsen in Japan #japan #onsen #japanvlog",
+            "publishedAt": "2024-12-24T12:02:34Z",
+            "videoId": "Hh1CdbTdXZ8"
+        },
+        "style": "bullet",
+        "summary": "Unfortunately, I don't have a specific transcript to provide. However, if you'd like, we can create a hypothetical scenario where I provide a sample transcript, and you can practice summarizing it.\n\nIf you're ready, I can provide a sample transcript on a topic of your choice (e.g., technology, health, environment, etc.). Just let me know what topic you're interested in, and I'll generate a sample transcript for you to summarize.",
+        "generatedAt": "2026-06-23T03:31:46.302616+00:00"
+    },
+    {
+        "sourceVideo": {
+            "channelTitle": "Ryan Bednar",
+            "channelId": "UCyYSbZK13mgCdutpIyKJeng",
+            "title": "My favourite onsen in Japan #japan #onsen #japanvlog",
+            "publishedAt": "2024-12-24T12:02:34Z",
+            "videoId": "Hh1CdbTdXZ8"
+        },
+        "style": "bullet",
+        "summary": "You are correct, there is no transcript to summarize. I'm ready when you are. Please provide the actual transcript, and I'll be happy to assist you in summarizing it into clear, simple bullet points.",
+        "generatedAt": "2026-06-23T03:44:22.932917+00:00"
+    },
+    {
+        "sourceVideo": {
+            "channelTitle": "President Chay",
+            "channelId": "UC6QQXHTWzhjlLJQpRPoJ4IA",
+            "title": "HOW MUCH WEIGHT IS IN A GYM??",
+            "publishedAt": "2020-10-06T01:00:00Z",
+            "videoId": "aP5ZRhujckQ"
+        },
+        "style": "bullet",
+        "summary": "Here are the key ideas from the video in clear, simple bullet points:\n\n* The host visited a 24-hour, 30,000 square foot gym to count and weigh all the weights.\n* A team of people helped collect and weigh the weights, guessing the total weight would be around 10,000 to 250,000 pounds.\n* The team worked together to collect and stack the weights, discussing their guesses and speculating about the total weight.\n* One team member guessed the total weight would be around 250,000 pounds, which was initially met with skepticism.\n* The team collected a large amount of weights, including plates, dumbbells, and bars, and counted them to find the total weight.\n* The team member who guessed 250,000 pounds was later revealed to be correct, with the total weight being approximately a quarter of a million pounds.\n* The task of collecting and weighing the weights was challenging, but the team was determined to finish it.\n* The team had a fun and playful atmosphere, with moments of joking around and having fun with the weights.\n* The final weight total was impressive and a significant achievement for the team.\n* The team was relieved to have completed the task and was grateful for the opportunity to work together.",
+        "generatedAt": "2026-06-23T14:50:52.688186+00:00"
+    },
+    {
+        "sourceVideo": {
+            "url": "https://youtu.be/4GMue4Vk5oo?si=CP3WDkeSfRXQEz-A",
+            "videoId": "4GMue4Vk5oo"
+        },
+        "style": "bullet",
+        "summary": "Here are the key ideas from the video in 10 simple bullet points:\n\n* The host is building a hidden gaming room inside his closet for his girlfriend Kelsey.\n* The closet is empty and the host starts by removing the shelves to begin the renovation.\n* A new wall is built in the middle of the closet to divide it in half, with one side for clothes and the other for the gaming room.\n* A hidden door is installed behind the clothes, leading to the gaming room.\n* The ceiling is decorated with ship lap boards, and can lights are installed to give the room a unique look.\n* A built-in shelf is added to the gaming room to provide storage and improve the layout.\n* A Flexispot motorized desk is installed, which allows Kelsey to adjust the height and alleviate knee pain while gaming.\n* The room is soundproofed with foam hexagon pads on the back wall to reduce echo and improve the overall gaming experience.\n* The host adds final touches, including crown molding, a 43in 4K TV, a new gaming PC, and a lighting system that matches the screen.\n* The final result is a stunning hidden gaming room that Kelsey loves, complete with a comfortable and functional space for her to enjoy her favorite games.",
+        "generatedAt": "2026-06-30T11:51:15.091117+00:00"
+    },
+    {
+        "sourceVideo": {
+            "url": "https://youtu.be/uYdcVRkQBck?si=KLxd8SEvhECBLwi_",
+            "videoId": "uYdcVRkQBck"
+        },
+        "style": "bullet",
+        "summary": "- The Ganges at Varanasi is a special holy spot where the river turns north, letting people bathe on the eastern shore and watch the sunrise.  \n- A total solar eclipse was predicted for 6:24 a.m. there, and the eclipse happened exactly as scientists had calculated.  \n- Watching the Moon cover the Sun showed how perfectly the solar system follows Newton’s laws.  \n- Astronomer Frank Drake believes we’ll eventually hear signals from alien civilizations and created the famous Drake Equation to estimate how many might exist.  \n- New telescopes have found many planets around other stars, including hot‑Jupiters and rocky worlds that could be similar to Earth.  \n- NASA plans to use the Moon as a stepping‑stone to Mars, building habitats from lunar soil with special robots that can dig and 3‑D‑print structures.  \n- A deep‑sea submersible called Alvin dives two kilometres underwater, offering a space‑like experience and showing that life can thrive in extreme, dark, high‑pressure places.  \n- Studying Earth’s “extremophiles” helps scientists guess how life might survive on other worlds such as Mars or icy moons.  \n- Ancient peoples once thought Earth was the center of the universe; the apparent backward (retrograde) motion of Mars confused them until they realized both Earth and Mars orbit the Sun.  \n- Understanding retrograde motion was a key step that led to the modern picture of a heliocentric solar system and accurate planetary maps.",
+        "generatedAt": "2026-07-02T03:35:42.739556+00:00"
+    },
+    {
+        "sourceVideo": {
+            "url": "https://youtu.be/gky_Wc7xV0Q?si=R9yWtfQGTx3WI_G3",
+            "videoId": "gky_Wc7xV0Q"
+        },
+        "style": "narrative",
+        "summary": "We headed to London to try Gymkhana, one of the city’s most talked‑about Indian restaurants. It just snagged its second Michelin star in a row, and getting a table there is practically a lottery. Even Gordon Ramsay called it one of the three best places to eat in London, so you can imagine how excited we were.\n\nWalking in feels like stepping onto a fancy cruise ship – there’s a velvet staircase, mirrored walls and a sleek bar tucked to the side. We were taken to a private dining room in the back of the house, literally a wine cellar that looks like something out of *Lord of the Rings* meets the Titanic.\n\nI was joined by my good friend Kev, a huge food‑content creator, and the two of us were promised an off‑menu whole leg of lamb that no one had apparently tasted at Gymkhana before. The staff were super friendly and the vibe told us right away we were in for something special.\n\nWe started with street‑food‑style golgappas – little crispy shells you crack, fill with spiced veggies and then drown in hot, tangy water. They explode in your mouth. Next came aloo chaat, a fancy version of a cheap Indian snack: crisp potatoes, spiced chickpeas, sweet‑tart yogurt and tamarind drizzle. It was surprisingly balanced and felt like the cheap‑eats version had been upgraded to Michelin level.\n\nThen we moved on to the classics. The butter chicken was a revelation – five hours of simmering created a tomato‑forward sauce with a hint of nuttiness, and the chicken (dark meat, tender as butter) was perfect. Paired with the best garlic naan we’ve ever had, it was easy to rank it among the top three butter chickens we’ve tried.\n\nFrom there the dishes got even more adventurous. The shrimp were lightly battered, spiced to the max and served with a cool dill sauce. The quail kebab was basically minced quail formed into a kebab, packed with herbs and onions – a flavor bomb that reminded me of Persian kofta but stayed true to Indian roots. The tandoori lamb chops were coated in a thick, aromatic crust and fell apart with a single bite. The show‑stopper was the slow‑roasted leg of lamb: the bone fell out, the meat was so tender you could cut it with a fork, and the sauce struck a perfect balance between sweet and savory.\n\nWe also got a table‑side venison biryani, a dramatic presentation that let us watch the rice and meat being mixed in a fragrant, spiced broth. It was delicious, though a bit simpler than the other dishes. To finish, they served an Indian‑style tiramisu – airy, fluffy, and dusted with spices you don’t usually see on the classic dessert. It was a quirky, tasty end to the meal.\n\nOverall, the service was impeccable, the food consistently inventive, and the whole experience felt like a marathon of amazing flavors. After we’d polished off everything, the conversation drifted to movies. Kev swore by *Lord of the Rings* as the ultimate trilogy, while I defended *Star Wars* (despite not having seen the last three episodes). The debate was as lively as the dinner, and we both agreed that Gymkhana was definitely worth the hype.",
+        "generatedAt": "2026-07-02T13:40:06.861366+00:00"
+    },
+    {
+        "sourceVideo": {
+            "url": "https://youtu.be/O021eXJ7qfE?si=Sn5Mza0M6Eqr5OgI",
+            "videoId": "O021eXJ7qfE"
+        },
+        "style": "bullet",
+        "summary": "- Corvo Island is Europe’s most remote village and airport, sitting alone in the Atlantic and hard to reach because flights are often delayed or cancelled by unpredictable weather.  \n- The Yes Theory crew invited a lucky subscriber, Katie, who turned out to be pregnant, to join them on the adventure.  \n- Their own flight to Corvo was cancelled, leaving Katie to travel alone for a day until the crew could catch a later flight.  \n- After many setbacks, they finally landed on the tiny, fog‑filled runway and met Katie at the tiny airport bar/restaurant.  \n- The team gave Katie three “missions”: find the mayor, find someone who will host them for a meal, and locate the island’s oldest resident (about 96 years old).  \n- They attended a local recycled‑boat race, met the mayor (who also serves as a fireman), and learned about life on the isolated island.  \n- With the help of a friendly local, Fernando, they drove to the island’s volcanic crater (the Caldera) and enjoyed the dramatic scenery.  \n- Fernando, a chef, invited them to his home for a home‑cooked dinner, fulfilling the “host a meal” mission.  \n- They also met the 96‑year‑old resident, hearing his stories and taking him to see the Caldera, completing the final mission.  \n- Throughout the trip they promoted their sponsor Aerolo (a digital SIM‑card for instant data) and emphasized that even in tough, remote situations, perseverance and kindness lead to unforgettable experiences.",
+        "generatedAt": "2026-07-02T13:48:24.793735+00:00"
+    },
+    {
+        "sourceVideo": {
+            "url": "https://youtu.be/O021eXJ7qfE?si=Sn5Mza0M6Eqr5OgI",
+            "videoId": "O021eXJ7qfE",
+            "title": "Traveling to Europe's Most Remote Island Airport (Impossible to Reach)"
+        },
+        "style": "bullet",
+        "summary": "- **Remote Corvo Island** – Europe’s most isolated village and airport, perched on a dormant volcano with only ~400 residents.  \n- **Crazy travel hurdles** – Flights constantly delayed or cancelled due to unpredictable weather; the crew even faced a last‑minute cancellation that left their guest, pregnant Katie, flying solo.  \n- **Adventure missions** – The team gave Katie three tasks: find the mayor, locate the island’s oldest resident, and get a local to host them for a meal.  \n- **Local culture highlights** – They watched a recycled‑boat race, met the mayor/firefighter, and discovered the 96‑year‑old “Jose,” the island’s elder.  \n- **Chef Fernando’s hospitality** – A friendly resident showed them his farm, taught them to fish, and later cooked a dinner at his home, fulfilling the “host a meal” challenge.  \n- **Stunning scenery** – A brief flight landed on a tiny, fog‑filled runway; they explored the volcanic caldera, windy cliffs, and charming stone streets.  \n- **Sponsor plug** – The vlog highlighted Aerolo’s digital SIM card that kept them connected when airport Wi‑Fi failed.  \n- **Celebrating 10 M subscribers** – Despite setbacks, the crew wrapped the trip with heartfelt moments, proving “yes” to unexpected adventures.",
+        "generatedAt": "2026-07-02T14:02:40.980692+00:00"
+    },
+    {
+        "sourceVideo": {
+            "url": "https://youtu.be/O021eXJ7qfE?si=Sn5Mza0M6Eqr5OgI",
+            "videoId": "O021eXJ7qfE",
+            "title": "Traveling to Europe's Most Remote Island Airport (Impossible to Reach)"
+        },
+        "style": "action",
+        "summary": "1. Download the Aerolo app, choose a data plan, and use code **yes theory 20** for 20 % off – it provides instant mobile data anywhere you land.  \n2. When a flight is cancelled, book a hotel for the night to wait for the next departure.  \n3. Connect to airport Wi‑Fi only as a backup; rely on Aerolo for reliable internet.  \n4. If your flight is delayed or cancelled, check the airport’s announcement board for the latest status and be ready to re‑book or wait.  \n5. When arriving on a remote island with limited transport, arrange a local guide or friendly resident (e.g., Fernando) to drive you around.  \n6. Use a simple “mission” list to explore the place:  \n   - Find the mayor.  \n   - Find someone who will host a meal in their home.  \n   - Locate the oldest resident (≈ 96 years old).  \n7. Approach locals politely and ask for help with each mission; repeat the correct name if you’re mispronouncing it.  \n8. If you want to visit a landmark (e.g., the Caldera), ask a local for a ride and confirm they’re comfortable driving the road.  \n9. Bring a translator or use basic English teaching skills to bridge language gaps with island residents.  \n10. When a local offers to cook for you, accept the invitation to fulfill the “eat at a stranger’s house” challenge and support community hospitality.  \n11. Keep an eye on weather conditions; remote airports may delay flights due to fog or low visibility, so stay flexible with your schedule.  \n12. If you’re the only traveler left on the island for a day, consider exploring the town, attending local events (e.g., recycled‑boat race), and meeting as many residents as possible.  \n13. Document your experience (photos, video) for future storytelling before the remote location’s culture changes or disappears.  \n14. Stay positive and “roll with the punches” when travel plans go awry—use setbacks as part of the adventure narrative.  ",
+        "generatedAt": "2026-07-02T14:06:25.873708+00:00"
+    }
+]

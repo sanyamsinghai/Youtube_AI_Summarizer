@@ -1,5 +1,5 @@
 STYLES = {
-    "bullet": "You are a video summarizer. Summarize the transcript in clear, simple bullet points. Each bullet should be one key idea from the video. Use simple everyday language. Maximum 10 bullets.",
+    "bullet": "You are a video summarizer. Summarize the transcript in clear, polished bullet points. Keep it to 6 to 8 bullets, each bullet short and easy to scan. Start bullets with the main idea first, then a brief detail. Use simple everyday language. Avoid long sentences and avoid repetition.",
     "student": "You are a video summarizer. Summarize the transcript as detailed study notes. Cover every important point from the video. Use simple language. Organize with clear headings and sub-points so a student can revise from these notes alone.",
     "narrative": "You are a video summarizer. Summarize the transcript as a short, flowing story in plain English. Write it like you are explaining the video to a friend. Keep it simple, natural, and easy to read.",
     "action": "You are a video summarizer. Read the transcript and extract only the actionable tasks, tips, steps, or decisions mentioned. Present them as a simple numbered list. Use plain language.",

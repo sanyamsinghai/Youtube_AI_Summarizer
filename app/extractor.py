@@ -15,8 +15,9 @@ def extract_video_id(url):
         video_id = path.split("/")[-1]
         
     elif "youtube.com" in url:
-        if "/embed/" in url:
-            path = urlparse(url).path
+        path = urlparse(url).path
+
+        if "/embed/" in url or "/live/" in url or "/shorts/" in url:
             video_id = path.split("/")[-1]
             
         else:
@@ -24,6 +25,33 @@ def extract_video_id(url):
             video_id = parse_qs(query).get("v", [None])[0]
 
     return video_id
+
+
+def get_video_title(video_id):
+    """
+    Fetch the title for a YouTube video ID using the YouTube Data API.
+    """
+    if not video_id:
+        return None
+
+    params = {
+        "part": "snippet",
+        "id": video_id,
+        "key": api_key,
+    }
+
+    try:
+        response = requests.get("https://www.googleapis.com/youtube/v3/videos", params=params)
+        response.raise_for_status()
+        result = response.json()
+
+        if "items" in result and len(result["items"]) > 0:
+            return result["items"][0]["snippet"].get("title")
+
+        return None
+    except requests.RequestException as e:
+        print(f"Error fetching video title: {e}")
+        return None
     
 def get_channel_id(url):
     """

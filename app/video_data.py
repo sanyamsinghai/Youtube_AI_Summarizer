@@ -1,7 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
-from extractor import extract_video_id, get_channel_id
+from app.extractor import extract_video_id, get_channel_id
 import json
 
 load_dotenv()
@@ -53,6 +53,6 @@ def filter_video_data(raw_data):
     
     return videos
 
-def save_to_json(data, filename="video_data.json"):
-    with open(filename, "w") as f:
+def save_to_json(data, filename="data/video_data.json"):
+    with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)

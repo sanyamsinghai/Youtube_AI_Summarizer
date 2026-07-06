@@ -37,7 +37,14 @@ def get_transcript(video_id, retries=2, delay_seconds=2):
     print(f"Failed to fetch transcript for video ID {video_id}: {last_error}")
     return None 
     
-def chunk_text(text, chunk_size=500):
+def chunk_text(text, chunk_size=6000):
+    """
+    Split transcript text into word chunks.
+
+    A chunk_size of 6000 words is roughly 7,800 tokens, which leaves enough
+    headroom for the system prompt and response while staying comfortably under
+    a 12K TPM Groq limit. Most normal YouTube transcripts will fit in one chunk.
+    """
     words = text.split()
     chunks = []
     
