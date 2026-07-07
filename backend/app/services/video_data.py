@@ -1,8 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
-from app.extractor import extract_video_id, get_channel_id
-import json
+from backend.app.services.extractor import get_channel_id
 
 load_dotenv()
 api_key = os.getenv("YOUTUBE_API_KEY")
@@ -53,6 +52,3 @@ def filter_video_data(raw_data):
     
     return videos
 
-def save_to_json(data, filename="data/video_data.json"):
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)

@@ -2,15 +2,15 @@ from fastapi import APIRouter
 
 import bootstrap  # noqa: F401
 
-from app.extractor import get_channel_id
-from app.extractor import get_video_title
-from app.email_validation import validate_recipient_email
-from app.prompts import STYLES
-from app.video_data import get_response, filter_video_data
-from app.transcript_fetcher import get_transcript
-from app.summarizer import summarize_transcript
-from app.email_sender import send_email
-from backend.schemas import summarize_request
+from backend.app.core.prompts import STYLES
+from backend.app.schemas.requests import summarize_request
+from backend.app.services.email_sender import send_email
+from backend.app.services.email_validation import validate_recipient_email
+from backend.app.services.extractor import get_channel_id
+from backend.app.services.extractor import get_video_title
+from backend.app.services.summarizer import summarize_transcript
+from backend.app.services.transcript_fetcher import get_transcript
+from backend.app.services.video_data import get_response, filter_video_data
 
 router = APIRouter()
 

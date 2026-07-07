@@ -1,7 +1,7 @@
 from groq import Groq, RateLimitError
-from app.prompts import STYLES
+from backend.app.core.prompts import STYLES
 from dotenv import load_dotenv
-from app.transcript_fetcher import chunk_text
+from backend.app.services.transcript_fetcher import chunk_text
 import os
 
 

@@ -1,8 +1,6 @@
-import json
-import os
 import bootstrap  # noqa: F401
 
-from app.summarizer import summarize_transcript
+from backend.app.services.summarizer import summarize_transcript
 
 # Check if video_data.json exists
 # if not os.path.exists("data/video_data.json"):

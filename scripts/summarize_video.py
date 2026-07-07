@@ -15,12 +15,12 @@ if str(ROOT_DIR) not in sys.path:
 
 import bootstrap  # noqa: F401
 
-from app.extractor import extract_video_id
-from app.extractor import get_video_title
-from app.email_sender import send_email
-from app.email_validation import validate_recipient_email
-from app.transcript_fetcher import get_transcript
-from app.summarizer import summarize_transcript
+from backend.app.services.email_sender import send_email
+from backend.app.services.email_validation import validate_recipient_email
+from backend.app.services.extractor import extract_video_id
+from backend.app.services.extractor import get_video_title
+from backend.app.services.summarizer import summarize_transcript
+from backend.app.services.transcript_fetcher import get_transcript
 
 
 def summarize_single_video(video_url, style='bullet'):

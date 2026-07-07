@@ -1,6 +1,6 @@
 import bootstrap  # noqa: F401
 
-from app.transcript_fetcher import chunk_text
+from backend.app.services.transcript_fetcher import chunk_text
 
 with open("data/video_data.json", "r", encoding="utf-8") as f:
     pass  # or just paste your transcript string directly

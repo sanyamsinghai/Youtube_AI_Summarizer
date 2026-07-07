@@ -1,0 +1,467 @@
+/* ---------------------------------------------------------
+   DESIGN SYSTEM — "Broadcast Monitor"
+   Grounded in the subject: this app watches a video, then
+   hands you back a transcript-like readout. The visual
+   language borrows from a video editing/broadcast monitor —
+   timecodes, a scrubber, a REC indicator, chapter markers —
+   rather than a generic SaaS dashboard.
+   --------------------------------------------------------- */
+
+:root {
+  --bg: #14151a;
+  --bg-elevated: #1d1f26;
+  --bg-card: #21232b;
+  --paper: #ede8de;
+  --ink: #ede8de;
+  --ink-dim: #9098a3;
+  --ink-faint: #5b616e;
+  --accent-rec: #e8483b;
+  --accent-rec-dim: #7a2e28;
+  --accent-chapter: #4fd1ae;
+  --border: rgba(237, 234, 227, 0.1);
+  --border-strong: rgba(237, 234, 227, 0.2);
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}
+
+.app-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px 64px;
+}
+
+.app-header {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.rec-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent-rec);
+  box-shadow: 0 0 0 4px rgba(232, 72, 59, 0.15);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.app-title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.app-title strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.panel {
+  width: 100%;
+  max-width: 720px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px;
+}
+
+@media (max-width: 560px) {
+  .panel {
+    padding: 22px;
+  }
+}
+
+/* ---------- Scrubber (signature element) ---------- */
+
+.scrubber {
+  width: 100%;
+  max-width: 720px;
+  margin-bottom: 22px;
+}
+
+.scrubber-track {
+  position: relative;
+  height: 3px;
+  background: var(--border-strong);
+  border-radius: 2px;
+  margin: 0 4px 10px;
+}
+
+.scrubber-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--accent-rec);
+  border-radius: 2px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scrubber-playhead {
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--accent-rec);
+  border: 2px solid var(--bg);
+  transform: translate(-50%, -50%);
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scrubber-marks {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.scrubber-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.scrubber-mark.active {
+  color: var(--accent-rec);
+}
+
+.scrubber-mark.done {
+  color: var(--accent-chapter);
+}
+
+.scrubber-mark .label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Typography ---------- */
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  margin: 0 0 8px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+h1 {
+  font-size: 26px;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-chapter);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.subtext {
+  color: var(--ink-dim);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+/* ---------- Form elements ---------- */
+
+.field {
+  margin-bottom: 20px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-dim);
+  margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="url"] {
+  width: 100%;
+  padding: 13px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+input:focus-visible {
+  border-color: var(--accent-chapter);
+  outline: 2px solid var(--accent-chapter);
+  outline-offset: 1px;
+}
+
+input::placeholder {
+  color: var(--ink-faint);
+}
+
+.error-text {
+  color: var(--accent-rec);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 13px 22px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent-rec);
+  color: #14151a;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-dim);
+  border-color: var(--border-strong);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--ink-dim);
+}
+
+.btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ---------- Style / delivery option cards ---------- */
+
+.option-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 560px) {
+  .option-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.option-card {
+  text-align: left;
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.option-card:hover {
+  border-color: var(--ink-dim);
+}
+
+.option-card.selected {
+  border-color: var(--accent-chapter);
+  background: rgba(79, 209, 174, 0.06);
+}
+
+.option-card .tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--accent-chapter);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.option-card .name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.option-card .desc {
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.4;
+}
+
+/* ---------- Result screen ---------- */
+
+.result-header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+}
+
+.style-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent-rec);
+  border: 1px solid var(--accent-rec-dim);
+  padding: 4px 9px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.transcript-paper {
+  background: var(--paper);
+  color: #1c1a16;
+  border-radius: 8px;
+  padding: 24px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.transcript-paper ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.transcript-paper li {
+  margin-bottom: 10px;
+}
+
+.transcript-paper li::marker {
+  color: var(--accent-rec);
+}
+
+.loading-line {
+  font-family: var(--font-mono);
+  color: var(--accent-chapter);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spinner {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--accent-chapter);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.email-status {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.email-status.success {
+  background: rgba(79, 209, 174, 0.1);
+  border: 1px solid rgba(79, 209, 174, 0.3);
+  color: var(--accent-chapter);
+}
+
+.email-status.failure {
+  background: rgba(232, 72, 59, 0.1);
+  border: 1px solid rgba(232, 72, 59, 0.3);
+  color: var(--accent-rec);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rec-dot,
+  .spinner,
+  .scrubber-fill,
+  .scrubber-playhead {
+    animation: none;
+    transition: none;
+  }
+}

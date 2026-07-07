@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 import bootstrap  # noqa: F401
 
-from backend.routes import router
+from backend.app.routes.summary import router
 
 app = FastAPI()
 
