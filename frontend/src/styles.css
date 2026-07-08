@@ -410,6 +410,16 @@ input::placeholder {
   border-color: var(--ink-dim);
 }
 
+.email-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.result-actions {
+  margin-top: 24px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .spinner {
     animation: none;

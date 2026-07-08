@@ -1,8 +1,5 @@
 import { useState } from "react";
 
-// Keys match the 5 styles already defined in your Phase 2 roadmap —
-// keep these in sync with whatever your backend expects in the
-// `style` field.
 const STYLES = [
   { key: "bullets", name: "Bullet Points", desc: "Quick read, straight to the point." },
   { key: "brief", name: "Executive Brief", desc: "Professional, high-level framing." },
@@ -11,8 +8,8 @@ const STYLES = [
   { key: "action_items", name: "Action Items", desc: "Task-focused, what to actually do." },
 ];
 
-export default function StyleSelector({ onBack, onSubmit }) {
-  const [selected, setSelected] = useState(null);
+export default function StyleSelector({ initialStyle = null, onBack, onSubmit }) {
+  const [selected, setSelected] = useState(initialStyle);
 
   return (
     <div className="panel">
@@ -45,7 +42,7 @@ export default function StyleSelector({ onBack, onSubmit }) {
           disabled={!selected}
           onClick={() => onSubmit(selected)}
         >
-          Continue →
+          Get my summary →
         </button>
       </div>
     </div>

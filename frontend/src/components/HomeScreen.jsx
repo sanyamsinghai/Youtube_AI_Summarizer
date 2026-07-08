@@ -7,8 +7,8 @@ import { useState } from "react";
 const YT_URL_PATTERN =
   /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|live\/|shorts\/|embed\/)|youtu\.be\/)[\w-]+/i;
 
-export default function HomeScreen({ onSubmit }) {
-  const [url, setUrl] = useState("");
+export default function HomeScreen({ initialUrl = "", onSubmit }) {
+  const [url, setUrl] = useState(initialUrl);
   const [touched, setTouched] = useState(false);
 
   const isValid = YT_URL_PATTERN.test(url.trim());

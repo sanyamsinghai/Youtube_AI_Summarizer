@@ -9,9 +9,6 @@ const STYLE_LABELS = {
   action_items: "Action Items",
 };
 
-// Handles both shapes coming back from /summarize: an array of
-// bullet-style lines, or one long string for prose styles. Adjust
-// this if your backend's real response shape differs.
 function renderSummaryBody(summary) {
   if (Array.isArray(summary)) {
     return (
@@ -28,14 +25,7 @@ function renderSummaryBody(summary) {
     .map((para, i) => <p key={i}>{para}</p>);
 }
 
-export default function ResultScreen({
-  loading,
-  error,
-  data,
-  deliveryMethod,
-  onStartOver,
-  onBack,
-}) {
+export default function ResultScreen({ loading, error, data, onStartOver, onBack }) {
   const [email, setEmail] = useState("");
   const [emailState, setEmailState] = useState("idle"); // idle | sending | success | failure
   const [emailError, setEmailError] = useState("");
@@ -67,7 +57,7 @@ export default function ResultScreen({
   if (loading) {
     return (
       <div className="panel">
-        <span className="eyebrow">Step 4</span>
+        <span className="eyebrow">Step 3</span>
         <h1>Fetching and summarizing…</h1>
         <p className="loading-line">
           <span className="spinner" /> Pulling the transcript and generating your summary
@@ -79,7 +69,7 @@ export default function ResultScreen({
   if (error) {
     return (
       <div className="panel">
-        <span className="eyebrow">Step 4</span>
+        <span className="eyebrow">Step 3</span>
         <h1>That one didn't work</h1>
         <p className="error-text">{error}</p>
         <div className="btn-row">
@@ -99,16 +89,17 @@ export default function ResultScreen({
   return (
     <div className="panel">
       <div className="result-header">
-        <span className="eyebrow">Step 4</span>
+        <span className="eyebrow">Step 3</span>
         <div className="style-badge">{STYLE_LABELS[data.style] || data.style}</div>
         <h1>{data.title}</h1>
       </div>
 
       <div className="transcript-paper">{renderSummaryBody(data.summary)}</div>
 
-      {deliveryMethod === "email" && emailState !== "success" && (
-        <form className="field" style={{ marginTop: 24 }} onSubmit={handleSendEmail}>
-          <label htmlFor="delivery-email">Send this to your email</label>
+      {emailState !== "success" && (
+        <form className="field email-section" onSubmit={handleSendEmail}>
+          <label htmlFor="delivery-email">Email this summary (optional)</label>
+          <p className="subtext">Want a copy in your inbox? Enter your address below.</p>
           <input
             id="delivery-email"
             type="email"
@@ -130,7 +121,10 @@ export default function ResultScreen({
         <div className="email-status success">Sent to {email}. Check your inbox.</div>
       )}
 
-      <div className="btn-row" style={{ marginTop: 24 }}>
+      <div className="btn-row result-actions">
+        <button type="button" className="btn btn-ghost" onClick={onBack}>
+          ← Change style
+        </button>
         <button type="button" className="btn btn-ghost" onClick={onStartOver}>
           Summarize another video
         </button>

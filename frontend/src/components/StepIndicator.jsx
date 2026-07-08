@@ -1,8 +1,7 @@
 const STEPS = [
   { key: "home", label: "1. Paste Link" },
   { key: "style", label: "2. Choose Style" },
-  { key: "delivery", label: "3. Get Summary" },
-  { key: "result", label: "4. Send (Optional)" },
+  { key: "result", label: "3. Your Summary" },
 ];
 
 export default function StepIndicator({ currentStep }) {
