@@ -5,6 +5,8 @@ Simple and fast - no batch processing, no rate-limiting issues.
 """
 
 import sys
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 import json
 from datetime import datetime, timezone
 from pathlib import Path

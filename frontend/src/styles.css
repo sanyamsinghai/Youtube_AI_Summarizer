@@ -425,3 +425,56 @@ input::placeholder {
     animation: none;
   }
 }
+
+/* ---------- Transcript Paper Markdown Rendering Styles ---------- */
+
+.transcript-paper h2.summary-h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 6px;
+  color: var(--ink);
+}
+
+.transcript-paper h2.summary-h2:first-of-type {
+  margin-top: 0;
+}
+
+.transcript-paper h3.summary-h3 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.transcript-paper p.summary-p {
+  margin: 0 0 12px;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.transcript-paper p.summary-p:last-child {
+  margin-bottom: 0;
+}
+
+.transcript-paper ul.summary-ul, 
+.transcript-paper ol.summary-ol {
+  padding-left: 20px;
+  margin: 0 0 16px;
+}
+
+.transcript-paper li.summary-li {
+  margin-bottom: 8px;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.transcript-paper li.summary-li:last-child {
+  margin-bottom: 0;
+}
+

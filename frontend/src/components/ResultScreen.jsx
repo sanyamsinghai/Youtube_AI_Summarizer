@@ -9,20 +9,134 @@ const STYLE_LABELS = {
   action_items: "Action Items",
 };
 
+
+
+function parseInlineMarkdown(text) {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, idx) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={idx}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
 function renderSummaryBody(summary) {
   if (Array.isArray(summary)) {
     return (
-      <ul>
+      <ul className="summary-ul">
         {summary.map((line, i) => (
-          <li key={i}>{line}</li>
+          <li key={i} className="summary-li">{parseInlineMarkdown(line)}</li>
         ))}
       </ul>
     );
   }
-  return String(summary)
-    .split("\n")
-    .filter(Boolean)
-    .map((para, i) => <p key={i}>{para}</p>);
+
+  const lines = String(summary).split("\n");
+  const renderedElements = [];
+  let currentList = null;
+
+  lines.forEach((line, idx) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      if (currentList) {
+        renderedElements.push(currentList);
+        currentList = null;
+      }
+      return;
+    }
+
+    // Header 2: ## Header
+    if (trimmed.startsWith("## ")) {
+      if (currentList) {
+        renderedElements.push(currentList);
+        currentList = null;
+      }
+      renderedElements.push(
+        <h2 key={`h2-${idx}`} className="summary-h2">
+          {parseInlineMarkdown(trimmed.slice(3))}
+        </h2>
+      );
+      return;
+    }
+
+    // Header 3: ### Header
+    if (trimmed.startsWith("### ")) {
+      if (currentList) {
+        renderedElements.push(currentList);
+        currentList = null;
+      }
+      renderedElements.push(
+        <h3 key={`h3-${idx}`} className="summary-h3">
+          {parseInlineMarkdown(trimmed.slice(4))}
+        </h3>
+      );
+      return;
+    }
+
+    // Bullet list: * item or - item
+    const bulletMatch = trimmed.match(/^[\*\-]\s+(.*)$/);
+    if (bulletMatch) {
+      if (!currentList || currentList.type !== "ul") {
+        if (currentList) renderedElements.push(currentList);
+        currentList = {
+          type: "ul",
+          key: `list-ul-${idx}`,
+          items: [],
+        };
+      }
+      currentList.items.push(
+        <li key={`li-${idx}`} className="summary-li">
+          {parseInlineMarkdown(bulletMatch[1])}
+        </li>
+      );
+      return;
+    }
+
+    // Numbered list: 1. item
+    const numMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+    if (numMatch) {
+      if (!currentList || currentList.type !== "ol") {
+        if (currentList) renderedElements.push(currentList);
+        currentList = {
+          type: "ol",
+          key: `list-ol-${idx}`,
+          items: [],
+        };
+      }
+      currentList.items.push(
+        <li key={`li-${idx}`} className="summary-li">
+          {parseInlineMarkdown(numMatch[2])}
+        </li>
+      );
+      return;
+    }
+
+    // Normal paragraph
+    if (currentList) {
+      renderedElements.push(currentList);
+      currentList = null;
+    }
+    renderedElements.push(
+      <p key={`p-${idx}`} className="summary-p">
+        {parseInlineMarkdown(trimmed)}
+      </p>
+    );
+  });
+
+  if (currentList) {
+    renderedElements.push(currentList);
+  }
+
+  return renderedElements.map((el) => {
+    if (el.type === "ul") {
+      return <ul key={el.key} className="summary-ul">{el.items}</ul>;
+    }
+    if (el.type === "ol") {
+      return <ol key={el.key} className="summary-ol">{el.items}</ol>;
+    }
+    return el;
+  });
 }
 
 export default function ResultScreen({ loading, error, data, onStartOver, onBack }) {

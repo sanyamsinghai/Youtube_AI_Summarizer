@@ -7,15 +7,19 @@ import os
 
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY")
+model_name = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 client = Groq(api_key=api_key)
 
-def summarize_chunk(chunk, style):
+def summarize_chunk(chunk, style, system_prompt=None):
+    if system_prompt is None:
+        system_prompt = STYLES.get(style, "You are a helpful assistant.")
+    
     try:
         response = client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model=model_name,
             messages=[
-                {"role": "system", "content": STYLES[style]},
+                {"role": "system", "content": system_prompt},
                 {"role": "user", "content": chunk}
             ]
         )
@@ -36,11 +40,17 @@ def combine_summaries(summaries, style, batch_size=4):
 
         for i in range(0, len(current), batch_size):
             batch = current[i:i + batch_size]
-            batch_text = "\n\n".join(f"- {item}" for item in batch)
+            batch_text = "\n\n".join(f"--- Partial Summary {idx+1} ---\n{item}" for idx, item in enumerate(batch))
+            
+            system_prompt = (
+                f"You are a professional editor. Combine multiple partial summaries into a single, cohesive, high-quality summary. "
+                f"You must strictly adhere to the requested output style guidelines:\n{STYLES[style]}"
+            )
+            
             combined = summarize_chunk(
-                "Combine these partial summaries into one coherent summary in the same style. Remove repetition and keep only the important points.\n\n"
-                + batch_text,
+                "Please combine the following partial summaries. Eliminate repetition, maintain consistent formatting, preserve key facts/metrics, and merge them into a single coherent output:\n\n" + batch_text,
                 style,
+                system_prompt=system_prompt
             )
 
             if combined:
@@ -53,7 +63,7 @@ def combine_summaries(summaries, style, batch_size=4):
     return current[0]
 
 def summarize_transcript(transcript, style):
-    print(f"[GROQ CALL] summarizing with style={style}")
+    print(f"[GROQ CALL] summarizing with style={style} using model={model_name}")
     # split transcript into smaller word chunks to stay under the model limit
     chunks = chunk_text(transcript)
 

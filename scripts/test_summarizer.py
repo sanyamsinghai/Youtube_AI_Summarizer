@@ -1,11 +1,10 @@
+import sys
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 import bootstrap  # noqa: F401
 
 from backend.app.services.summarizer import summarize_transcript
-
-# Check if video_data.json exists
-# if not os.path.exists("data/video_data.json"):
-#     print("data/video_data.json not found. Run main.py first to fetch videos.")
-#     raise SystemExit(1)
 
 # try:
 #     with open("data/video_data.json", "r", encoding="utf-8") as f:
