@@ -53,6 +53,7 @@ def combine_summaries(summaries, style, batch_size=4):
     return current[0]
 
 def summarize_transcript(transcript, style):
+    print(f"[GROQ CALL] summarizing with style={style}")
     # split transcript into smaller word chunks to stay under the model limit
     chunks = chunk_text(transcript)
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Scrubber from "./components/Scrubber.jsx";
+import StepIndicator from "./components/StepIndicator.jsx";
 import HomeScreen from "./components/HomeScreen.jsx";
 import StyleSelector from "./components/StyleSelector.jsx";
 import DeliverySelector from "./components/DeliverySelector.jsx";
@@ -58,13 +58,12 @@ export default function App() {
   return (
     <div className="app-shell">
       <div className="app-header">
-        <span className="rec-dot" />
         <span className="app-title">
-          <strong>REC</strong> · YouTube AI Summarizer
+          YouTube AI Summarizer<span className="sub"> · Paste, choose a style, get a summary</span>
         </span>
       </div>
 
-      <Scrubber currentStep={step} />
+      <StepIndicator currentStep={step} />
 
       {step === "home" && <HomeScreen onSubmit={handleHomeSubmit} />}
 
