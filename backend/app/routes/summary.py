@@ -11,38 +11,24 @@ from backend.app.services.summarizer import summarize_transcript
 from backend.app.services.transcript_fetcher import get_transcript
 from backend.app.services.video_data import get_response, filter_video_data
 
+from backend.app.services.pipeline import run_summary_pipeline
+
 router = APIRouter()
 
 
 @router.post("/summarize")
 def summarize_video(request: SummarizeVideoRequest):
-    style = request.style
-    if style not in STYLES:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid style. Choose one of the supported summary styles.",
-        )
+    try:
+        return run_summary_pipeline(request.url, request.style)
+    except ValueError as exc:
+        msg = str(exc)
+        if "Invalid style" in msg or "Invalid YouTube video URL" in msg:
+            raise HTTPException(status_code=400, detail=msg)
+        elif "Transcript not available" in msg:
+            raise HTTPException(status_code=404, detail=msg)
+        else:
+            raise HTTPException(status_code=500, detail=msg)
 
-    video_id = extract_video_id(request.url)
-    if not video_id:
-        raise HTTPException(status_code=400, detail="Invalid YouTube video URL.")
-
-    transcript = get_transcript(video_id)
-    if transcript is None:
-        raise HTTPException(status_code=404, detail="Transcript not available for this video.")
-
-    summary = summarize_transcript(transcript, style)
-    if summary is None:
-        raise HTTPException(status_code=500, detail="Failed to generate summary.")
-
-    title = get_video_title(video_id)
-
-    return {
-        "video_id": video_id,
-        "title": title,
-        "summary": summary,
-        "style": style,
-    }
 
 @router.post("/email/send")
 def email_send(request: SendEmailRequest):
