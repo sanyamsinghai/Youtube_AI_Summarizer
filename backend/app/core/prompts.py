@@ -1,3 +1,13 @@
+# Appended to every system prompt so the summary comes back in English even
+# when the source transcript is in Hindi, French, or anything else. Hardcoded
+# for now — when multi-language output is added later, this becomes
+# f"Always write your response in {language}, regardless of the transcript's
+# original language." with `language` passed in from the request.
+LANGUAGE_INSTRUCTION = (
+    "\n\nAlways write your response in English, regardless of the transcript's "
+    "original language."
+)
+
 STYLES = {
     # Frontend contract keys
     "bullets": (

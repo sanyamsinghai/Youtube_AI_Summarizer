@@ -14,8 +14,14 @@ def get_transcript(video_id, retries=2, delay_seconds=2):
             try:
                 transcript = api.fetch(video_id, languages=["en"])
             except NoTranscriptFound:
-                # Fallback to any available language
-                transcript = api.fetch(video_id)
+                # fetch() with no languages arg STILL defaults to ('en',), so it
+                # can't be used as a "give me anything" fallback. list() instead
+                # returns every transcript actually available for this video,
+                # in whatever language it was captioned/auto-captioned in —
+                # we just grab the first one and fetch that specific object.
+                available = api.list(video_id)
+                first_available = next(iter(available))
+                transcript = first_available.fetch()
 
             return " ".join(segment.text for segment in transcript)
 
@@ -37,13 +43,13 @@ def get_transcript(video_id, retries=2, delay_seconds=2):
     print(f"Failed to fetch transcript for video ID {video_id}: {last_error}")
     return None 
     
-def chunk_text(text, chunk_size=6000):
+def chunk_text(text, chunk_size=2500):
     """
     Split transcript text into word chunks.
 
-    A chunk_size of 6000 words is roughly 7,800 tokens, which leaves enough
-    headroom for the system prompt and response while staying comfortably under
-    a 12K TPM Groq limit. Most normal YouTube transcripts will fit in one chunk.
+    A chunk_size of 2500 words is highly safe. Non-English languages (like Hindi or
+    French) have a much higher token-to-word ratio (up to 3x). Using 2500 words ensures 
+    that the request stays safely under Groq's 12K TPM limit.
     """
     words = text.split()
     chunks = []

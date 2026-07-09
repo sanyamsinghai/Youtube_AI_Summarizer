@@ -1,5 +1,5 @@
 from groq import Groq, RateLimitError
-from backend.app.core.prompts import STYLES
+from backend.app.core.prompts import STYLES, LANGUAGE_INSTRUCTION
 from dotenv import load_dotenv
 from backend.app.services.transcript_fetcher import chunk_text
 import os
@@ -13,7 +13,7 @@ client = Groq(api_key=api_key)
 
 def summarize_chunk(chunk, style, system_prompt=None):
     if system_prompt is None:
-        system_prompt = STYLES.get(style, "You are a helpful assistant.")
+        system_prompt = STYLES.get(style, "You are a helpful assistant.") + LANGUAGE_INSTRUCTION
     
     try:
         response = client.chat.completions.create(
@@ -45,7 +45,7 @@ def combine_summaries(summaries, style, batch_size=4):
             system_prompt = (
                 f"You are a professional editor. Combine multiple partial summaries into a single, cohesive, high-quality summary. "
                 f"You must strictly adhere to the requested output style guidelines:\n{STYLES[style]}"
-            )
+            ) + LANGUAGE_INSTRUCTION
             
             combined = summarize_chunk(
                 "Please combine the following partial summaries. Eliminate repetition, maintain consistent formatting, preserve key facts/metrics, and merge them into a single coherent output:\n\n" + batch_text,
