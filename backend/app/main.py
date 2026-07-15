@@ -3,7 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import bootstrap  # noqa: F401
 
-from backend.app.routes.summary import router
+from backend.app.database import engine, Base
+from backend.app.routes.summary import router as summary_router
+from backend.app.routes.channels import router as channels_router
+
+# Initialize database tables
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -18,4 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router)
+app.include_router(summary_router)
+app.include_router(channels_router)
+

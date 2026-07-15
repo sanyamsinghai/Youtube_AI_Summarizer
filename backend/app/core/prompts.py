@@ -93,4 +93,4 @@ STYLES = {
         "1) the primary theme/context, 2) the main challenge or question, 3) the central arguments or solutions proposed, "
         "and 4) the final conclusion or takeaway. Ensure it is readable in under 20 seconds."
     )
-}
+}

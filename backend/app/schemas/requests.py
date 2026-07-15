@@ -19,3 +19,7 @@ class summarize_request(BaseModel):
     channel_url: str
     style: str
     email: str
+
+
+class SubscribeChannelRequest(BaseModel):
+    channel_url: str

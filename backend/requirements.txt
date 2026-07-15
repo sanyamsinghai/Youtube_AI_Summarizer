@@ -26,3 +26,4 @@ youtube-transcript-api==1.2.4
 fastapi==0.135.1
 uvicorn==0.41.0
 resend==2.32.2
+sqlalchemy==2.0.31

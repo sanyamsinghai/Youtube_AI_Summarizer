@@ -1,102 +1,72 @@
-import { useState } from "react";
-import StepIndicator from "./components/StepIndicator.jsx";
-import HomeScreen from "./components/HomeScreen.jsx";
-import StyleSelector from "./components/StyleSelector.jsx";
-import ResultScreen from "./components/ResultScreen.jsx";
-import { summarizeVideo } from "./api/client.js";
-
-function summaryCacheKey(url, style) {
-  return `${url}|${style}`;
-}
+import { useState, useEffect } from "react";
+import { HashRouter, Routes, Route, NavLink, Link } from "react-router-dom";
+import SummarizerPage from "./pages/SummarizerPage.jsx";
+import FeaturesPage from "./pages/FeaturesPage.jsx";
 
 export default function App() {
-  const [step, setStep] = useState("home"); // home | style | result
-  const [url, setUrl] = useState("");
-  const [style, setStyle] = useState(null);
+  const [theme, setTheme] = useState("light");
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
-  const [summaryCache, setSummaryCache] = useState(null);
+  // Load and apply theme from LocalStorage on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  }, []);
 
-  async function fetchSummary(targetUrl, targetStyle) {
-    const cacheKey = summaryCacheKey(targetUrl, targetStyle);
-
-    if (summaryCache?.key === cacheKey) {
-      setData(summaryCache.data);
-      setError(null);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    setData(null);
-
-    try {
-      const result = await summarizeVideo({ url: targetUrl, style: targetStyle });
-      setData(result);
-      setSummaryCache({ key: cacheKey, data: result });
-    } catch (err) {
-      setError(err.message || "Couldn't generate a summary for that video.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function handleHomeSubmit(submittedUrl) {
-    setUrl(submittedUrl);
-    setStep("style");
-  }
-
-  function handleStyleSubmit(selectedStyle) {
-    setStyle(selectedStyle);
-    setStep("result");
-    fetchSummary(url, selectedStyle);
-  }
-
-  function handleBackFromResult() {
-    setStep("style");
-  }
-
-  function handleStartOver() {
-    setUrl("");
-    setStyle(null);
-    setData(null);
-    setError(null);
-    setSummaryCache(null);
-    setStep("home");
-  }
+  const toggleTheme = () => {
+    const nextTheme = theme === "light" ? "dark" : "light";
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    document.documentElement.setAttribute("data-theme", nextTheme);
+  };
 
   return (
-    <div className="app-shell">
-      <div className="app-header">
-        <span className="app-title">
-          YouTube AI Summarizer<span className="sub"> · Paste, choose a style, get a summary</span>
-        </span>
+    <HashRouter>
+      <div className="app-shell">
+        <div className="app-header">
+          <div className="header-left">
+            {/* Logo link pointing back to home page */}
+            <Link to="/" className="app-title-link">
+              <span className="app-logo">RECAP</span>
+            </Link>
+          </div>
+          
+          <div className="header-center">
+            {/* Center-aligned Navigation Bar */}
+            <nav className="app-nav-center">
+              <NavLink to="/" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+                Home
+              </NavLink>
+              <NavLink to="/features" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+                Features
+              </NavLink>
+            </nav>
+          </div>
+          
+          <div className="header-right" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* Round Theme Toggle Button with Rotate & Scale animations */}
+            <button 
+              type="button" 
+              className={`theme-toggle-btn ${theme === "light" ? "light" : "dark"}`} 
+              onClick={toggleTheme}
+              aria-label="Toggle Theme"
+            >
+              <span className="theme-toggle-icon">{theme === "light" ? "🌙" : "☀️"}</span>
+            </button>
+            <div className="profile-placeholder" aria-hidden="true" title="Profile (Placeholder)">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.6 }}>
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <Routes>
+          <Route path="/" element={<SummarizerPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+        </Routes>
       </div>
-
-      <StepIndicator currentStep={step} />
-
-      {step === "home" && <HomeScreen initialUrl={url} onSubmit={handleHomeSubmit} />}
-
-      {step === "style" && (
-        <StyleSelector
-          initialStyle={style}
-          onBack={() => setStep("home")}
-          onSubmit={handleStyleSubmit}
-        />
-      )}
-
-      {step === "result" && (
-        <ResultScreen
-          loading={loading}
-          error={error}
-          data={data}
-          onBack={handleBackFromResult}
-          onStartOver={handleStartOver}
-        />
-      )}
-    </div>
+    </HashRouter>
   );
 }

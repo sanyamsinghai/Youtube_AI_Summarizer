@@ -22,12 +22,16 @@
 
 const BASE_URL = "/api"; // proxied to your FastAPI backend by vite.config.js
 
-async function request(path, body) {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    method: "POST",
+async function request(path, body, method = "POST") {
+  const options = {
+    method,
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  };
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
+  
+  const res = await fetch(`${BASE_URL}${path}`, options);
 
   let data;
   try {
@@ -55,4 +59,40 @@ export function sendSummaryEmail({ videoId, title, summary, style, email }) {
     style,
     email,
   });
+}
+
+export function subscribeToChannel(channelUrl) {
+  return request("/channels/subscribe", { channel_url: channelUrl });
+}
+
+export function getChannels() {
+  return request("/channels", null, "GET");
+}
+
+export function unsubscribeChannel(channelId) {
+  return request(`/channels/${channelId}`, null, "DELETE");
+}
+
+export function getChannelVideos(channelId) {
+  return request(`/channels/${channelId}/videos`, null, "GET");
+}
+
+export function getVideoComments(videoId) {
+  return request(`/videos/${videoId}/comments`, null, "GET");
+}
+
+export function getChannelGrowth(channelId) {
+  return request(`/channels/${channelId}/growth`, null, "GET");
+}
+
+export function lookupChannel(url) {
+  return request(`/channels/lookup?url=${encodeURIComponent(url)}`, null, "GET");
+}
+
+export function getVideosByPlaylist(playlistId) {
+  return request(`/channels/videos-by-playlist?playlist_id=${playlistId}`, null, "GET");
+}
+
+export function getGrowthByInfo(channelId, subscriberCount) {
+  return request(`/channels/growth-by-info?channel_id=${channelId}&subscriber_count=${subscriberCount}`, null, "GET");
 }
