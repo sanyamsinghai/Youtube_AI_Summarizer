@@ -1,12 +1,13 @@
 import bootstrap  # noqa: F401
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from groq import Groq, RateLimitError
 from dotenv import load_dotenv
 import os
 
 from backend.app.services.transcript_cache import transcript_cache
+from backend.app.core.rate_limiter import chat_limiter
 
 load_dotenv()
 
@@ -41,7 +42,7 @@ VIDEO TRANSCRIPT:
 """
 
 
-@router.post("/chat")
+@router.post("/chat", dependencies=[Depends(chat_limiter)])
 def chat(request: ChatRequest):
     transcript = transcript_cache.get(request.video_id)
 
@@ -74,6 +75,6 @@ def chat(request: ChatRequest):
         raise HTTPException(status_code=429, detail="Rate limit reached. Please wait a moment and try again.")
     except Exception as exc:
         print(f"\n[API ERROR] Unexpected failure in chatbot: {exc}\n")
-        raise HTTPException(status_code=500, detail=f"Chat error: {str(exc)}")
+        raise HTTPException(status_code=500, detail="Something went wrong inside the chatbot. Please try again.")
 
     return {"reply": reply}

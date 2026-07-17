@@ -6,6 +6,7 @@ class Channel(Base):
     __tablename__ = "channels"
 
     id = Column(String, primary_key=True, index=True)
+    user_id = Column(String, primary_key=True, default="guest", index=True)  # Scopes subscription to user
     name = Column(String, nullable=False)
     thumbnail_url = Column(String, nullable=True)
     uploads_playlist_id = Column(String, nullable=False)

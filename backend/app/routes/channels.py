@@ -22,9 +22,12 @@ def subscribe_channel(request: SubscribeChannelRequest, db: Session = Depends(ge
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
-    # 2. Check if already subscribed
+    # 2. Check if already subscribed for this user
     channel_id = channel_info["id"]
-    existing_channel = db.query(Channel).filter(Channel.id == channel_id).first()
+    existing_channel = db.query(Channel).filter(
+        Channel.id == channel_id, 
+        Channel.user_id == "guest"
+    ).first()
 
     if existing_channel:
         # Update details in case they changed
@@ -37,9 +40,10 @@ def subscribe_channel(request: SubscribeChannelRequest, db: Session = Depends(ge
         db.refresh(existing_channel)
         return existing_channel
 
-    # 3. Add new subscription
+    # 3. Add new subscription scoped to this user
     new_channel = Channel(
         id=channel_id,
+        user_id="guest",  # Scoped to active user session
         name=channel_info["name"],
         thumbnail_url=channel_info["thumbnail_url"],
         uploads_playlist_id=channel_info["uploads_playlist_id"],
@@ -54,13 +58,13 @@ def subscribe_channel(request: SubscribeChannelRequest, db: Session = Depends(ge
 
 @router.get("/channels")
 def list_channels(db: Session = Depends(get_db)):
-    channels = db.query(Channel).order_by(Channel.subscribed_at.desc()).all()
+    channels = db.query(Channel).filter(Channel.user_id == "guest").order_by(Channel.subscribed_at.desc()).all()
     return channels
 
 
 @router.delete("/channels/{channel_id}")
 def unsubscribe_channel(channel_id: str, db: Session = Depends(get_db)):
-    channel = db.query(Channel).filter(Channel.id == channel_id).first()
+    channel = db.query(Channel).filter(Channel.id == channel_id, Channel.user_id == "guest").first()
     if not channel:
         raise HTTPException(status_code=404, detail="Channel not found in subscriptions.")
 
@@ -71,8 +75,8 @@ def unsubscribe_channel(channel_id: str, db: Session = Depends(get_db)):
 
 @router.get("/channels/{channel_id}/videos")
 def get_subscribed_channel_videos(channel_id: str, db: Session = Depends(get_db)):
-    # 1. Find channel in DB to get uploads playlist ID
-    channel = db.query(Channel).filter(Channel.id == channel_id).first()
+    # 1. Find channel in DB to get uploads playlist ID for this user
+    channel = db.query(Channel).filter(Channel.id == channel_id, Channel.user_id == "guest").first()
     if not channel:
         raise HTTPException(status_code=404, detail="Channel is not subscribed.")
 
@@ -95,7 +99,7 @@ def get_video_top_comments(video_id: str):
 
 @router.get("/channels/{channel_id}/growth")
 def get_subscribed_channel_growth(channel_id: str, db: Session = Depends(get_db)):
-    channel = db.query(Channel).filter(Channel.id == channel_id).first()
+    channel = db.query(Channel).filter(Channel.id == channel_id, Channel.user_id == "guest").first()
     if not channel:
         raise HTTPException(status_code=404, detail="Channel is not subscribed.")
 

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class SummarizeVideoRequest(BaseModel):
@@ -11,14 +11,14 @@ class SendEmailRequest(BaseModel):
     title: str | None = None
     summary: str
     style: str | None = None
-    email: str
+    email: EmailStr
 
 
 # Backwards-compatible (older channel-based flow)
 class summarize_request(BaseModel):
     channel_url: str
     style: str
-    email: str
+    email: EmailStr
 
 
 class SubscribeChannelRequest(BaseModel):

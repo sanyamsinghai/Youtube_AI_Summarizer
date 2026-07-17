@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 import bootstrap  # noqa: F401
 
@@ -12,11 +12,12 @@ from backend.app.services.transcript_fetcher import get_transcript
 from backend.app.services.video_data import get_response, filter_video_data
 
 from backend.app.services.pipeline import run_summary_pipeline
+from backend.app.core.rate_limiter import summarize_limiter, email_limiter
 
 router = APIRouter()
 
 
-@router.post("/summarize")
+@router.post("/summarize", dependencies=[Depends(summarize_limiter)])
 def summarize_video(request: SummarizeVideoRequest):
     try:
         return run_summary_pipeline(request.url, request.style)
@@ -35,7 +36,7 @@ def summarize_video(request: SummarizeVideoRequest):
             raise HTTPException(status_code=500, detail=msg)
 
 
-@router.post("/email/send")
+@router.post("/email/send", dependencies=[Depends(email_limiter)])
 def email_send(request: SendEmailRequest):
     is_valid, email_or_message = validate_recipient_email(request.email)
     if not is_valid:
