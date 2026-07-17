@@ -19,8 +19,14 @@ class TokenBucketLimiter:
         tokens, last_update = self.buckets[ip]
         elapsed = now - last_update
         
-        # Add new tokens based on elapsed time, capping at max capacity
-        new_tokens = min(float(self.capacity), tokens + (elapsed * self.rate))
+        # Add new tokens based on elapsed time
+        new_tokens = tokens + (elapsed * self.rate)
+        
+        # If bucket is fully replenished back to max capacity, evict the entry to prevent memory creep
+        if new_tokens >= self.capacity:
+            del self.buckets[ip]
+            return [float(self.capacity), now]
+            
         return [new_tokens, now]
 
     def __call__(self, request: Request):
