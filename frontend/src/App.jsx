@@ -4,11 +4,11 @@ import SummarizerPage from "./pages/SummarizerPage.jsx";
 import FeaturesPage from "./pages/FeaturesPage.jsx";
 
 export default function App() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
 
   // Load and apply theme from LocalStorage on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light";
+    const savedTheme = localStorage.getItem("theme") || "dark";
     setTheme(savedTheme);
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
@@ -25,8 +25,8 @@ export default function App() {
       <div className="app-shell">
         <div className="app-header">
           <div className="header-left">
-            {/* Logo link pointing back to home page */}
-            <Link to="/" className="app-title-link">
+            {/* Logo link — passes resetToHome flag so SummarizerPage clears the saved result */}
+            <Link to="/" state={{ resetToHome: true }} className="app-title-link">
               <span className="app-logo">RECAP</span>
             </Link>
           </div>
@@ -43,7 +43,7 @@ export default function App() {
             </nav>
           </div>
           
-          <div className="header-right" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div className="header-right">
             {/* Round Theme Toggle Button with Rotate & Scale animations */}
             <button 
               type="button" 

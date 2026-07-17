@@ -413,7 +413,7 @@ export default function FeaturesPage() {
     <>
       <div className="explorer-layout">
       {/* LEFT COLUMN: Sticky / Clean Sidebar Column */}
-      <div className="sidebar-column" style={{ display: "flex", flexDirection: "column", gap: "20px", width: "100%" }}>
+      <div className="sidebar-column">
         {/* Search Input Panel */}
         <form onSubmit={handleSearch} className="panel subscription-form" style={{ margin: 0 }}>
           <label htmlFor="channel-search-input" style={{ fontWeight: 600, fontSize: "13.5px", marginBottom: "10px", display: "block" }}>
@@ -513,8 +513,8 @@ export default function FeaturesPage() {
         </div>
       </div>
 
-      {/* RIGHT COLUMN: Active Dashboard Details Column */}
-      <div className="dashboard-column" style={{ flex: 1, width: "100%" }}>
+      {/* MAIN COLUMN: Active Dashboard Details */}
+      <div className="dashboard-column">
         {!selectedChannel ? (
           <div className="panel" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "350px", color: "var(--ink-dim)", textAlign: "center" }}>
             <span style={{ fontSize: "42px", marginBottom: "14px" }}>📡</span>
@@ -567,16 +567,7 @@ export default function FeaturesPage() {
               </div>
             </div>
 
-            {/* Growth chart */}
-            {growthLoading && (
-              <p className="loading-line">
-                <span className="spinner" /> Loading growth details...
-              </p>
-            )}
-            {growthError && <p className="error-text">Failed to fetch growth history: {growthError}</p>}
-            {!growthLoading && !growthError && growthData.length > 0 && (
-              <GrowthChart data={growthData} />
-            )}
+
 
             {/* Videos Grid */}
             <div className="section videos-section" style={{ borderTop: "1px solid var(--border)", paddingTop: "20px" }}>

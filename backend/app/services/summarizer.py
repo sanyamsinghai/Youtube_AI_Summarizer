@@ -7,9 +7,16 @@ import os
 
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY")
+
+# Improvement 3 reverted: moonshotai/kimi-k2-instruct is not on Groq free tier
+# llama-3.3-70b-versatile is the best model available on the free tier
 model_name = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
+# Improvement 2: Lower temperature for more precise, factual output (default was 1.0)
+TEMPERATURE = float(os.getenv("GROQ_TEMPERATURE", "0.4"))
+
 client = Groq(api_key=api_key)
+
 
 def summarize_chunk(chunk, style, system_prompt=None):
     if system_prompt is None:
@@ -18,6 +25,7 @@ def summarize_chunk(chunk, style, system_prompt=None):
     try:
         response = client.chat.completions.create(
             model=model_name,
+            temperature=TEMPERATURE,  # Improvement 2: precise, low-hallucination output
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": chunk}
@@ -31,6 +39,7 @@ def summarize_chunk(chunk, style, system_prompt=None):
     except (IndexError, AttributeError):
         content = None  # handle missing/changed response shape
     return content
+
 
 def combine_summaries(summaries, style, batch_size=4):
     current = summaries[:]
@@ -62,21 +71,30 @@ def combine_summaries(summaries, style, batch_size=4):
 
     return current[0]
 
-def summarize_transcript(transcript, style):
-    print(f"[GROQ CALL] summarizing with style={style} using model={model_name}")
-    # split transcript into smaller word chunks to stay under the model limit
+
+def summarize_transcript(transcript, style, title=None):
+    print(f"[GROQ CALL] summarizing with style={style} using model={model_name} temperature={TEMPERATURE}")
+
+    # Improvement 1: Inject video title at the top of every chunk so the model
+    # has richer context about what it is summarizing
+    title_prefix = f'Video Title: "{title}"\n\n' if title else ""
+
     chunks = chunk_text(transcript)
 
     if not chunks:
         return None
 
     if len(chunks) == 1:
-        return summarize_chunk(chunks[0], style)
+        user_content = title_prefix + "Transcript:\n" + chunks[0]
+        return summarize_chunk(user_content, style)
 
     summaries = []
 
-    for chunk in chunks:
-        summary = summarize_chunk(chunk, style)
+    for i, chunk in enumerate(chunks):
+        # Inject title on first chunk only to avoid repetition on merge chunks
+        prefix = title_prefix if i == 0 else ""
+        user_content = prefix + "Transcript segment:\n" + chunk
+        summary = summarize_chunk(user_content, style)
         if summary:
             summaries.append(summary)
 
@@ -84,4 +102,3 @@ def summarize_transcript(transcript, style):
         return None
 
     return combine_summaries(summaries, style)
-

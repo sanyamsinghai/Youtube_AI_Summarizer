@@ -96,3 +96,11 @@ export function getVideosByPlaylist(playlistId) {
 export function getGrowthByInfo(channelId, subscriberCount) {
   return request(`/channels/growth-by-info?channel_id=${channelId}&subscriber_count=${subscriberCount}`, null, "GET");
 }
+
+export function sendChatMessage({ videoId, message, history }) {
+  return request("/chat", {
+    video_id: videoId,
+    message,
+    history,
+  });
+}
