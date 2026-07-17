@@ -5,6 +5,11 @@ from backend.app.services.transcript_fetcher import chunk_text
 import os
 
 
+class ServiceUnavailableError(Exception):
+    """Raised when the AI provider is rate-limited or temporarily unavailable."""
+    pass
+
+
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY")
 
@@ -31,8 +36,11 @@ def summarize_chunk(chunk, style, system_prompt=None):
                 {"role": "user", "content": chunk}
             ]
         )
-    except RateLimitError:
-        print("Groq daily token limit reached. Please try again later.")
+    except RateLimitError as e:
+        print(f"\n[RATE LIMIT] Groq API rate/token limit reached: {e}\n")
+        raise ServiceUnavailableError("rate_limit")
+    except Exception as e:
+        print(f"\n[API ERROR] Unexpected failure calling Groq: {e}\n")
         return None
     try:
         content = response.choices[0].message.content

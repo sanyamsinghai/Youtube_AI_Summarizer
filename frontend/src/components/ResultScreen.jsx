@@ -197,23 +197,43 @@ export default function ResultScreen({ loading, error, data, onStartOver, onBack
 
   if (loading) {
     return (
-      <div className="panel">
-        <h1>Fetching and summarizing…</h1>
-        <p className="loading-line">
-          <span className="spinner" /> Pulling the transcript and generating your summary
-        </p>
+      <div className="panel skeleton-panel">
+        <div className="skeleton-header">
+          <div className="skeleton-title shimmer" />
+          <div className="skeleton-badge shimmer" />
+        </div>
+        <div className="skeleton-body">
+          <div className="skeleton-line shimmer w-90" />
+          <div className="skeleton-line shimmer w-80" />
+          <div className="skeleton-line shimmer w-95" />
+          <div className="skeleton-line shimmer w-60" />
+          <div className="skeleton-line shimmer w-85" style={{ marginTop: "24px" }} />
+          <div className="skeleton-line shimmer w-90" />
+          <div className="skeleton-line shimmer w-70" />
+        </div>
       </div>
     );
   }
 
   if (error) {
+    // Pick a relevant icon based on the error type
+    const isBusy     = error.toLowerCase().includes("busy") || error.toLowerCase().includes("demand");
+    const isNoCaption = error.toLowerCase().includes("caption") || error.toLowerCase().includes("subtitle");
+    const isNetwork  = error.toLowerCase().includes("server") || error.toLowerCase().includes("connection");
+    const icon = isBusy ? "⏳" : isNoCaption ? "🔇" : isNetwork ? "📡" : "⚠️";
+
     return (
-      <div className="panel">
-        <h1>That one didn't work</h1>
-        <p className="error-text">{error}</p>
-        <div className="btn-row">
+      <div className="panel" style={{ textAlign: "center", padding: "48px 32px", maxWidth: "480px", margin: "0 auto" }}>
+        <div style={{ fontSize: "40px", marginBottom: "16px" }}>{icon}</div>
+        <h2 style={{ margin: "0 0 10px", fontSize: "18px", fontWeight: 700, color: "var(--ink)" }}>
+          {isBusy ? "We're a bit busy" : isNoCaption ? "No captions available" : isNetwork ? "Connection issue" : "Couldn't process this video"}
+        </h2>
+        <p style={{ margin: "0 0 28px", fontSize: "14px", color: "var(--ink-dim)", lineHeight: "1.6" }}>
+          {error}
+        </p>
+        <div className="btn-row" style={{ justifyContent: "center" }}>
           <button type="button" className="btn btn-ghost" onClick={onBack}>
-            ← Back
+            ← Try another URL
           </button>
           <button type="button" className="btn btn-primary" onClick={onStartOver}>
             Start over

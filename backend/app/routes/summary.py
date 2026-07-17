@@ -7,7 +7,7 @@ from backend.app.schemas.requests import SendEmailRequest, SummarizeVideoRequest
 from backend.app.services.email_sender import send_email
 from backend.app.services.email_validation import validate_recipient_email
 from backend.app.services.extractor import extract_video_id, get_channel_id, get_video_title
-from backend.app.services.summarizer import summarize_transcript
+from backend.app.services.summarizer import summarize_transcript, ServiceUnavailableError
 from backend.app.services.transcript_fetcher import get_transcript
 from backend.app.services.video_data import get_response, filter_video_data
 
@@ -20,11 +20,16 @@ router = APIRouter()
 def summarize_video(request: SummarizeVideoRequest):
     try:
         return run_summary_pipeline(request.url, request.style)
+    except ServiceUnavailableError:
+        raise HTTPException(
+            status_code=429,
+            detail="We're experiencing high demand right now. Please wait a minute and try again.",
+        )
     except ValueError as exc:
         msg = str(exc)
-        if "Invalid style" in msg or "Invalid YouTube video URL" in msg:
+        if "Invalid style" in msg or "Invalid YouTube video URL" in msg or "valid YouTube link" in msg:
             raise HTTPException(status_code=400, detail=msg)
-        elif "Transcript not available" in msg:
+        elif "Transcript not available" in msg or "captions available" in msg:
             raise HTTPException(status_code=404, detail=msg)
         else:
             raise HTTPException(status_code=500, detail=msg)

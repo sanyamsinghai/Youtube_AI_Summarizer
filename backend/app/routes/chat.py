@@ -69,9 +69,11 @@ def chat(request: ChatRequest):
             messages=messages,
         )
         reply = response.choices[0].message.content
-    except RateLimitError:
+    except RateLimitError as e:
+        print(f"\n[RATE LIMIT] Chatbot API rate/token limit reached: {e}\n")
         raise HTTPException(status_code=429, detail="Rate limit reached. Please wait a moment and try again.")
     except Exception as exc:
+        print(f"\n[API ERROR] Unexpected failure in chatbot: {exc}\n")
         raise HTTPException(status_code=500, detail=f"Chat error: {str(exc)}")
 
     return {"reply": reply}

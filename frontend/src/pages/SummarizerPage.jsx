@@ -6,6 +6,24 @@ import { summarizeVideo } from "../api/client.js";
 
 const SESSION_KEY = "recap_summarizer_state";
 
+// Map raw backend/network errors to polished user-facing messages
+function friendlyError(err) {
+  const msg = (err?.message || "").toLowerCase();
+  if (msg.includes("valid youtube") || msg.includes("invalid") || msg.includes("url")) {
+    return "That doesn't look like a valid YouTube link. Please check the URL and try again.";
+  }
+  if (msg.includes("captions") || msg.includes("transcript") || msg.includes("subtitles")) {
+    return "This video doesn't have captions available. Try a different video with subtitles enabled.";
+  }
+  if (msg.includes("high demand") || msg.includes("rate") || msg.includes("busy") || msg.includes("429")) {
+    return "Our servers are a bit busy right now. Please wait a moment and try again.";
+  }
+  if (msg.includes("non-json") || msg.includes("failed to fetch") || msg.includes("network")) {
+    return "Couldn't reach the server. Please check your connection and try again.";
+  }
+  return "Something went wrong while processing this video. Please try again in a moment.";
+}
+
 function summaryCacheKey(url, style) {
   return `${url}|${style}`;
 }
@@ -81,7 +99,7 @@ export default function SummarizerPage() {
       setData(result);
       setSummaryCache({ key: cacheKey, data: result });
     } catch (err) {
-      setError(err.message || "Couldn't generate a summary for that video.");
+      setError(friendlyError(err));
     } finally {
       setLoading(false);
     }
