@@ -24,3 +24,25 @@ class ChannelSnapshot(Base):
     views = Column(Integer, nullable=False)
     recorded_at = Column(DateTime, default=datetime.utcnow)
 
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(String, primary_key=True, index=True)  # Holds Google's 'sub' claim
+    email = Column(String, unique=True, nullable=False, index=True)
+    name = Column(String, nullable=True)
+
+
+class Summary(Base):
+    __tablename__ = "summaries"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(String, ForeignKey("users.id"), nullable=False)
+    video_id = Column(String, nullable=False)
+    title = Column(String, nullable=False)
+    summary_content = Column(String, nullable=False)  # Stores JSON serialized list/text
+    style = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+

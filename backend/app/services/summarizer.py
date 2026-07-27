@@ -3,6 +3,8 @@ from backend.app.core.prompts import STYLES, LANGUAGE_INSTRUCTION
 from dotenv import load_dotenv
 from backend.app.services.transcript_fetcher import chunk_text
 import os
+import time
+import re
 
 
 class ServiceUnavailableError(Exception):
@@ -23,30 +25,61 @@ TEMPERATURE = float(os.getenv("GROQ_TEMPERATURE", "0.4"))
 client = Groq(api_key=api_key)
 
 
-def summarize_chunk(chunk, style, system_prompt=None):
+def summarize_chunk(chunk, style, system_prompt=None, max_retries=3, initial_delay=4.0):
     if system_prompt is None:
         system_prompt = STYLES.get(style, "You are a helpful assistant.") + LANGUAGE_INSTRUCTION
     
-    try:
-        response = client.chat.completions.create(
-            model=model_name,
-            temperature=TEMPERATURE,  # Improvement 2: precise, low-hallucination output
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": chunk}
-            ]
-        )
-    except RateLimitError as e:
-        print(f"\n[RATE LIMIT] Groq API rate/token limit reached: {e}\n")
-        raise ServiceUnavailableError("rate_limit")
-    except Exception as e:
-        print(f"\n[API ERROR] Unexpected failure calling Groq: {e}\n")
-        return None
-    try:
-        content = response.choices[0].message.content
-    except (IndexError, AttributeError):
-        content = None  # handle missing/changed response shape
-    return content
+    delay = initial_delay
+    for attempt in range(max_retries + 1):
+        try:
+            response = client.chat.completions.create(
+                model=model_name,
+                temperature=TEMPERATURE,  # Improvement 2: precise, low-hallucination output
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": chunk}
+                ]
+            )
+            try:
+                content = response.choices[0].message.content
+            except (IndexError, AttributeError):
+                content = None
+            return content
+
+        except RateLimitError as e:
+            if attempt == max_retries:
+                print(f"\n[RATE LIMIT] Groq API rate/token limit reached after {max_retries} retries: {e}\n")
+                raise ServiceUnavailableError("rate_limit")
+            
+            # Determine how long to wait (parse from headers or message)
+            retry_after = 3.0
+            try:
+                if hasattr(e, "response") and e.response is not None:
+                    headers = e.response.headers
+                    if "retry-after" in headers:
+                        retry_after = float(headers["retry-after"]) + 0.5
+            except Exception:
+                pass
+
+            if retry_after == 3.0:
+                match = re.search(r"try again in ([\d\.]+)s", str(e), re.IGNORECASE)
+                if match:
+                    retry_after = float(match.group(1)) + 0.5
+
+            # If the wait time is too long (e.g. daily/hourly limit hit), fail immediately
+            if retry_after > 20.0:
+                print(f"\n[RATE LIMIT] Cooldown time of {retry_after:.2f}s is too long (Daily limit likely hit). Failing request immediately.\n")
+                raise ServiceUnavailableError("rate_limit")
+
+            # Wait and display info
+            wait_time = max(retry_after, delay)
+            print(f"\n[RATE LIMIT] Hit rate limit. Waiting {wait_time:.2f}s before retry {attempt + 1}/{max_retries}...\n")
+            time.sleep(wait_time)
+            delay *= 2.0  # Exponential backoff
+
+        except Exception as e:
+            print(f"\n[API ERROR] Unexpected failure calling Groq: {e}\n")
+            return None
 
 
 def combine_summaries(summaries, style, batch_size=4):

@@ -151,11 +151,11 @@ def format_summary_html(summary, title=None, style=None):
 def send_email(to, summary, title=None, style=None):
     try:
         r = resend.Emails.send({
-            "from": "onboarding@resend.dev",
+            "from": os.getenv("RESEND_FROM_EMAIL"),
             "to": [to],
             "subject": f"New Video Summary{f' - {title}' if title else ''}",
             "html": format_summary_html(summary, title=title, style=style)
         })
         return True, r
     except ResendError as exc:
-        return False, str(exc)
+        return False, str(exc)

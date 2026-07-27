@@ -4,6 +4,7 @@ import bootstrap  # noqa: F401
 
 from backend.app.database import get_db
 from backend.app.models import Channel
+from backend.app.auth_utils import get_current_user_id
 from backend.app.schemas.requests import SubscribeChannelRequest
 from backend.app.services.youtube_channels import (
     get_channel_info,
@@ -15,7 +16,11 @@ from backend.app.services.youtube_channels import (
 router = APIRouter()
 
 @router.post("/channels/subscribe")
-def subscribe_channel(request: SubscribeChannelRequest, db: Session = Depends(get_db)):
+def subscribe_channel(
+    request: SubscribeChannelRequest, 
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id)
+):
     try:
         # 1. Resolve channel info via API
         channel_info = get_channel_info(request.channel_url)
@@ -26,7 +31,7 @@ def subscribe_channel(request: SubscribeChannelRequest, db: Session = Depends(ge
     channel_id = channel_info["id"]
     existing_channel = db.query(Channel).filter(
         Channel.id == channel_id, 
-        Channel.user_id == "guest"
+        Channel.user_id == user_id
     ).first()
 
     if existing_channel:
@@ -43,7 +48,7 @@ def subscribe_channel(request: SubscribeChannelRequest, db: Session = Depends(ge
     # 3. Add new subscription scoped to this user
     new_channel = Channel(
         id=channel_id,
-        user_id="guest",  # Scoped to active user session
+        user_id=user_id,  # Scoped to active user session
         name=channel_info["name"],
         thumbnail_url=channel_info["thumbnail_url"],
         uploads_playlist_id=channel_info["uploads_playlist_id"],
@@ -57,14 +62,21 @@ def subscribe_channel(request: SubscribeChannelRequest, db: Session = Depends(ge
 
 
 @router.get("/channels")
-def list_channels(db: Session = Depends(get_db)):
-    channels = db.query(Channel).filter(Channel.user_id == "guest").order_by(Channel.subscribed_at.desc()).all()
+def list_channels(
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id)
+):
+    channels = db.query(Channel).filter(Channel.user_id == user_id).order_by(Channel.subscribed_at.desc()).all()
     return channels
 
 
 @router.delete("/channels/{channel_id}")
-def unsubscribe_channel(channel_id: str, db: Session = Depends(get_db)):
-    channel = db.query(Channel).filter(Channel.id == channel_id, Channel.user_id == "guest").first()
+def unsubscribe_channel(
+    channel_id: str, 
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id)
+):
+    channel = db.query(Channel).filter(Channel.id == channel_id, Channel.user_id == user_id).first()
     if not channel:
         raise HTTPException(status_code=404, detail="Channel not found in subscriptions.")
 
@@ -74,9 +86,13 @@ def unsubscribe_channel(channel_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/channels/{channel_id}/videos")
-def get_subscribed_channel_videos(channel_id: str, db: Session = Depends(get_db)):
+def get_subscribed_channel_videos(
+    channel_id: str, 
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id)
+):
     # 1. Find channel in DB to get uploads playlist ID for this user
-    channel = db.query(Channel).filter(Channel.id == channel_id, Channel.user_id == "guest").first()
+    channel = db.query(Channel).filter(Channel.id == channel_id, Channel.user_id == user_id).first()
     if not channel:
         raise HTTPException(status_code=404, detail="Channel is not subscribed.")
 
@@ -98,8 +114,12 @@ def get_video_top_comments(video_id: str):
 
 
 @router.get("/channels/{channel_id}/growth")
-def get_subscribed_channel_growth(channel_id: str, db: Session = Depends(get_db)):
-    channel = db.query(Channel).filter(Channel.id == channel_id, Channel.user_id == "guest").first()
+def get_subscribed_channel_growth(
+    channel_id: str, 
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id)
+):
+    channel = db.query(Channel).filter(Channel.id == channel_id, Channel.user_id == user_id).first()
     if not channel:
         raise HTTPException(status_code=404, detail="Channel is not subscribed.")
 

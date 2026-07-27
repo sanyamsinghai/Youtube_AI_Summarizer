@@ -104,3 +104,16 @@ export function sendChatMessage({ videoId, message, history }) {
     history,
   });
 }
+
+export async function getCurrentUser() {
+  const res = await fetch("http://localhost:8000/auth/me", { credentials: "include" });
+  return res.json();
+}
+
+export async function getUserSummaries() {
+  const res = await fetch("http://localhost:8000/auth/me/summaries", { credentials: "include" });
+  return res.json();
+}
+
+
+

@@ -12,15 +12,42 @@ from backend.app.services.transcript_fetcher import get_transcript
 from backend.app.services.video_data import get_response, filter_video_data
 
 from backend.app.services.pipeline import run_summary_pipeline
+from sqlalchemy.orm import Session
+import json
+
+from backend.app.database import get_db
+from backend.app.models import Summary
+from backend.app.auth_utils import get_current_user_id
 from backend.app.core.rate_limiter import summarize_limiter, email_limiter
+
 
 router = APIRouter()
 
 
 @router.post("/summarize", dependencies=[Depends(summarize_limiter)])
-def summarize_video(request: SummarizeVideoRequest):
+def summarize_video(
+    request: SummarizeVideoRequest,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id)
+):
     try:
-        return run_summary_pipeline(request.url, request.style)
+        result = run_summary_pipeline(request.url, request.style)
+        
+        # Save summary to user history if logged in
+        if user_id != "guest":
+            summary_val = result["summary"]
+            serialized = json.dumps(summary_val) if isinstance(summary_val, (list, dict)) else summary_val
+            db_summary = Summary(
+                user_id=user_id,
+                video_id=result["video_id"],
+                title=result["title"],
+                summary_content=serialized,
+                style=result["style"]
+            )
+            db.add(db_summary)
+            db.commit()
+            
+        return result
     except ServiceUnavailableError:
         raise HTTPException(
             status_code=429,
@@ -34,6 +61,7 @@ def summarize_video(request: SummarizeVideoRequest):
             raise HTTPException(status_code=404, detail=msg)
         else:
             raise HTTPException(status_code=500, detail=msg)
+
 
 
 @router.post("/email/send", dependencies=[Depends(email_limiter)])
