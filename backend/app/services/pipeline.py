@@ -40,7 +40,7 @@ def run_summary_pipeline(url: str, style: str) -> dict:
     transcript_cache.set(video_id, transcript)
 
     # Pass title into summarizer for richer, more context-aware output
-    summary = summarize_transcript(transcript, style, title=title)
+    summary = summarize_transcript(transcript, style, title=title, video_id=video_id)
 
     if summary is None:
         raise ValueError("Something went wrong while processing this video. Please try again in a moment.")

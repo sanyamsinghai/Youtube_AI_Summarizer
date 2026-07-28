@@ -48,10 +48,10 @@ def summarize_video(
             db.commit()
             
         return result
-    except ServiceUnavailableError:
+    except ServiceUnavailableError as exc:
         raise HTTPException(
             status_code=429,
-            detail="We're experiencing high demand right now. Please wait a minute and try again.",
+            detail=str(exc) if str(exc) else "We're experiencing high demand right now. Please wait a minute and try again.",
         )
     except ValueError as exc:
         msg = str(exc)
@@ -108,7 +108,7 @@ def summarize_latest_channel_video(request: summarize_request):
     if transcript is None:
         raise HTTPException(status_code=404, detail="Transcript not available for this video.")
 
-    summary = summarize_transcript(transcript, style)
+    summary = summarize_transcript(transcript, style, video_id=video_id)
     if summary is None:
         raise HTTPException(status_code=500, detail="Failed to generate summary.")
 

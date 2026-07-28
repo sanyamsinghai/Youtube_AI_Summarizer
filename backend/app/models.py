@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime, Integer, ForeignKey
+from sqlalchemy import Column, String, DateTime, Integer, ForeignKey, UniqueConstraint
 from backend.app.database import Base
 
 class Channel(Base):
@@ -43,6 +43,22 @@ class Summary(Base):
     summary_content = Column(String, nullable=False)  # Stores JSON serialized list/text
     style = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class PartialSummary(Base):
+    __tablename__ = "partial_summaries"
+    __table_args__ = (
+        UniqueConstraint("video_id", "style", "chunk_index", name="uq_video_style_chunk"),
+    )
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    video_id = Column(String, nullable=False, index=True)
+    style = Column(String, nullable=False, index=True)
+    chunk_index = Column(Integer, nullable=False)
+    summary_text = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 
 
 
