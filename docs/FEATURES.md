@@ -74,3 +74,16 @@ Recap provides a **Channel Explorer Dashboard** allowing users to subscribe to t
   * **Subscribed List:** Subscribed channels are stored under the user's profile and displayed as clean grid cards on the dashboard.
   * **Upload Timeline:** Users can click on a subscribed channel to inspect its latest uploaded videos and trigger summarization runs on them directly.
   * **Analytics Snapshot:** Saves channel view and subscriber histories in `channel_snapshots` to monitor channel growth trends.
+
+---
+
+## 📄 7. PDF Export & Portability
+
+Recap allows users to save any generated summary (new or historical) directly as a formatted, printable PDF.
+
+* **How it works:**
+  * Clicking the **Share** menu button in the summary header displays the **Export to PDF** option.
+  * Clicking this option triggers the browser's high-fidelity print utility (`window.print()`).
+  * A custom `@media print` style configuration in [styles.css](file:///c:/Users/Asus/Desktop/YouTube_Video_%20Summarizer/frontend/src/styles.css) automatically takes control during this action, hiding navbar menus, sidebars, buttons, widgets (like the floating chat assistant), and input forms.
+  * It styles the text, headers, badges, and margins to look like a premium, vector-sharp, copy-pasteable document sheet (A4 portrait size).
+

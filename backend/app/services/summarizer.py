@@ -130,8 +130,9 @@ def summarize_transcript(transcript, style, title=None, video_id=None):
     # has richer context about what it is summarizing
     title_prefix = f'Video Title: "{title}"\n\n' if title else ""
 
-    # Reverted dynamic chunk size stuff to standard/default (2500 words per chunk)
-    chunks = chunk_text(transcript)
+    # Set chunk size to 1500 words so that each chunk uses ~3000-3500 tokens,
+    # safely staying under the strict 6000 TPM limit of llama-3.1-8b-instant.
+    chunks = chunk_text(transcript, chunk_size=1500)
 
     if not chunks:
         return None

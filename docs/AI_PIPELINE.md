@@ -11,14 +11,14 @@ When you request a summary of a video, the server performs a **Map-Reduce** work
 ```mermaid
 graph TD
     A[YouTube Video Link] -->|Get Transcript| B[Transcript Text]
-    B -->|Chunking| C[Segment Chunks of 2500 words]
+    B -->|Chunking| C[Segment Chunks of 1500 words]
     C -->|Map Stage: llama-3.1-8b| D[Individual Segment Summaries]
     D -->|Reduce Stage: llama-3.3-70b| E[Final Cohesive Summary]
 ```
 
 1. **Extraction:** The backend extracts the video ID from the URL and fetches the raw transcript (captions) using `youtube-transcript-api`.
-2. **Chunking (Split):** Very long videos contain more text than the model can digest in a single response. We split the transcript into segments of **2,500 words** each (using [transcript_fetcher.py](file:///c:/Users/Asus/Desktop/YouTube_Video_%20Summarizer/backend/app/services/transcript_fetcher.py#L46)).
-3. **Map Stage (Parallel Summarization):** We summarize each 2,500-word segment individually to extract its core facts.
+2. **Chunking (Split):** Very long videos contain more text than the model can digest in a single response. We split the transcript into segments of **1,500 words** each (using [transcript_fetcher.py](file:///c:/Users/Asus/Desktop/YouTube_Video_%20Summarizer/backend/app/services/transcript_fetcher.py#L46)). This standard size ensures each chunk request stays below 4,000 tokens, safely within the strict **6,000 TPM limit** of Groq's free-tier `llama-3.1-8b-instant` map model.
+3. **Map Stage (Parallel Summarization):** We summarize each 1,500-word segment individually to extract its core facts.
 4. **Reduce Stage (Consolidation):** We combine all segment summaries into a single, structured, final output matching the selected style template.
 
 ---
