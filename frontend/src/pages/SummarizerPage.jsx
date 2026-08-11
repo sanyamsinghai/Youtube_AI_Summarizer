@@ -45,7 +45,7 @@ function saveSession(state) {
   }
 }
 
-export default function SummarizerPage() {
+export default function SummarizerPage({ session }) {
   // Restore from sessionStorage on mount so navigating to /features and back keeps the summary
   const saved = loadSession();
 
@@ -123,7 +123,7 @@ export default function SummarizerPage() {
     <>
       {step === "home" && (
         <div className="welcome-row">
-          Welcome, Sanyam
+          {session?.logged_in && session?.name ? `Welcome, ${session.name}` : "Welcome to Recap"}
         </div>
       )}
 

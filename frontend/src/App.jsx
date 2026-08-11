@@ -184,7 +184,7 @@ export default function App() {
         )}
 
         <Routes>
-          <Route path="/" element={<SummarizerPage />} />
+          <Route path="/" element={<SummarizerPage session={session} />} />
           <Route path="/features" element={<FeaturesPage />} />
           <Route path="/history" element={<HistoryPage />} />
         </Routes>
