@@ -20,7 +20,11 @@
 //     UI can show it directly instead of a generic error.
 // ---------------------------------------------------------------
 
-const BASE_URL = "/api"; // proxied to your FastAPI backend by vite.config.js
+export const BACKEND_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://localhost:8000" : "");
+
+// In development, use "/api" to trigger the Vite dev proxy.
+// In production, use BACKEND_URL if set, otherwise relative paths "".
+const BASE_URL = import.meta.env.DEV ? "/api" : (BACKEND_URL || "");
 
 async function request(path, body, method = "POST") {
   const options = {
@@ -106,12 +110,14 @@ export function sendChatMessage({ videoId, message, history }) {
 }
 
 export async function getCurrentUser() {
-  const res = await fetch("http://localhost:8000/auth/me", { credentials: "include" });
+  const url = BACKEND_URL ? `${BACKEND_URL}/auth/me` : "/auth/me";
+  const res = await fetch(url, { credentials: "include" });
   return res.json();
 }
 
 export async function getUserSummaries() {
-  const res = await fetch("http://localhost:8000/auth/me/summaries", { credentials: "include" });
+  const url = BACKEND_URL ? `${BACKEND_URL}/auth/me/summaries` : "/auth/me/summaries";
+  const res = await fetch(url, { credentials: "include" });
   return res.json();
 }
 

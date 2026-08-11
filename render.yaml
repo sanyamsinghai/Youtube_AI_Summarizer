@@ -1,0 +1,53 @@
+# Render Blueprint Specification (render.yaml)
+# Use this to deploy the entire stack as a single service on Render.
+# Refer to: https://render.com/docs/blueprints for details.
+
+services:
+  - type: web
+    name: recap-youtube-summarizer
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free # Can be updated to starter/pro if needed
+    envVars:
+      # General settings
+      - key: ENV
+        value: production
+      - key: SESSION_SECRET_KEY
+        generateValue: true # Generates a secure random session secret key automatically
+
+      # API credentials (will prompt you to fill these in on the Render Dashboard)
+      - key: YOUTUBE_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM_EMAIL
+        sync: false
+
+      # Google OAuth login configuration (optional)
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+
+      # URLs. For single-service deployment, BACKEND_URL and FRONTEND_URL are identical.
+      # Render will assign a URL like: https://recap-youtube-summarizer.onrender.com.
+      # You should update these env vars in the Render Dashboard once your service is created.
+      - key: BACKEND_URL
+        value: https://recap-youtube-summarizer.onrender.com
+      - key: FRONTEND_URL
+        value: https://recap-youtube-summarizer.onrender.com
+
+      # Database Configuration:
+      # By default, uses SQLite. To prevent data loss when the free instance restarts,
+      # you can mount a persistent volume (uncomment the 'disk' section below) OR
+      # paste an external PostgreSQL URL (e.g., from Neon or Supabase) in DATABASE_URL.
+      - key: DATABASE_URL
+        value: sqlite:////data/app.db
+
+    # To enable persistent SQLite storage (Render charges $1/mo for disk volumes):
+    # disks:
+    #   - name: recap-data-disk
+    #     mountPath: /data
+    #     sizeGB: 1
