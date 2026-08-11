@@ -1,8 +1,20 @@
 import time
-
+import os
 from youtube_transcript_api import NoTranscriptFound, YouTubeTranscriptApi
+from youtube_transcript_api.proxies import WebshareProxyConfig
 
-api = YouTubeTranscriptApi()
+proxy_user = os.getenv("WEBSHARE_PROXY_USER")
+proxy_pass = os.getenv("WEBSHARE_PROXY_PASS")
+
+if proxy_user and proxy_pass:
+    api = YouTubeTranscriptApi(
+        proxy_config=WebshareProxyConfig(
+            proxy_username=proxy_user,
+            proxy_password=proxy_pass,
+        )
+    )
+else:
+    api = YouTubeTranscriptApi()
 
 def get_transcript(video_id, retries=2, delay_seconds=2):
     if video_id is None:
