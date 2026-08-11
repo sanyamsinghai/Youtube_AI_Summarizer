@@ -136,6 +136,14 @@ graph TD
 
 ---
 
+## 🌐 Production Deployment
+
+For deploying the application in production:
+* We recommend a **split-deployment topology**: Frontend on **Vercel**, Backend on **Render**, and Database on **Supabase**.
+* Refer to the comprehensive [Production Deployment Guide](file:///c:/Users/Asus/Desktop/YouTube_Video_%20Summarizer/docs/DEPLOYMENT.md) for step-by-step instructions on setting up environment variables, database persistence, and Google OAuth redirects.
+
+---
+
 ## ⚠️ Troubleshooting & Rate Limits
 
 *   **YouTube Transcript Errors**: If you encounter errors saying transcripts are disabled, consult [docs/IP_WORKAROUNDS.md](file:///c:/Users/Asus/Desktop/YouTube_Video_%20Summarizer/docs/IP_WORKAROUNDS.md). YouTube often blocks requests from cloud providers or residential connection pools due to rate limiting.

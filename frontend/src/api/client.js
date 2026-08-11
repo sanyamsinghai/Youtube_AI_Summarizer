@@ -30,6 +30,7 @@ async function request(path, body, method = "POST") {
   const options = {
     method,
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
   };
   if (body) {
     options.body = JSON.stringify(body);
