@@ -19,7 +19,7 @@ class ChannelSnapshot(Base):
     __tablename__ = "channel_snapshots"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    channel_id = Column(String, ForeignKey("channels.id"), nullable=False)
+    channel_id = Column(String, nullable=False, index=True)
     subscribers = Column(Integer, nullable=False)
     views = Column(Integer, nullable=False)
     recorded_at = Column(DateTime, default=datetime.utcnow)
