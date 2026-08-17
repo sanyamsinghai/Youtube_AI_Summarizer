@@ -2,6 +2,9 @@ import time
 import os
 from youtube_transcript_api import NoTranscriptFound, YouTubeTranscriptApi
 from youtube_transcript_api.proxies import WebshareProxyConfig
+from dotenv import load_dotenv
+
+load_dotenv()
 
 proxy_user = os.getenv("WEBSHARE_PROXY_USER")
 proxy_pass = os.getenv("WEBSHARE_PROXY_PASS")
